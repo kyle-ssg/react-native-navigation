@@ -1,17 +1,9 @@
 package com.reactnativenavigation.params;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 
-import com.reactnativenavigation.utils.TypefaceLoader;
-
 public class StyleParams {
-    public Bundle params;
-
-    public StyleParams(Bundle params) {
-        this.params = params;
-    }
     public static class Color {
         @ColorInt
         private Integer color = null;
@@ -39,39 +31,8 @@ public class StyleParams {
         public static Color parse(Bundle bundle, String key) {
             return bundle.containsKey(key) ? new Color(bundle.getInt(key)) : new Color();
         }
-
-        public String getHexColor() {
-            return String.format("#%06X", (0xFFFFFF & getColor()));
-        }
-
-        public int getColor(int defaultColor) {
-            return hasColor() ? getColor() : defaultColor;
-        }
     }
 
-    public static class Font {
-        private Typeface typeface;
-
-        public Font(String font) {
-            typeface = new TypefaceLoader(font).getTypeFace();
-        }
-
-        public Font() {
-        }
-
-        public boolean hasFont() {
-            return typeface != null;
-        }
-
-        public Typeface get() {
-            if (typeface == null) {
-                throw new RuntimeException("Font undefined");
-            }
-            return typeface;
-        }
-    }
-
-    public Orientation orientation;
     public Color statusBarColor;
     public Color contextualMenuStatusBarColor;
     public Color contextualMenuButtonsColor;
@@ -79,7 +40,7 @@ public class StyleParams {
 
     public Color topBarColor;
     public CollapsingTopBarParams collapsingTopBarParams;
-    public boolean topBarCollapseOnScroll;
+    public boolean topBarHidden;
     public boolean topBarElevationShadowEnabled;
     public boolean topTabsHidden;
     public boolean drawScreenBelowTopBar;
@@ -92,17 +53,12 @@ public class StyleParams {
     public Color titleBarSubtitleColor;
     public Color titleBarButtonColor;
     public Color titleBarDisabledButtonColor;
-    public Font titleBarTitleFont;
-    public boolean titleBarTitleTextCentered;
     public boolean backButtonHidden;
 
     public Color topTabTextColor;
-    public Color topTabIconColor;
     public Color selectedTopTabTextColor;
-    public Color selectedTopTabIconColor;
     public int selectedTopTabIndicatorHeight;
     public Color selectedTopTabIndicatorColor;
-    public boolean topTabsScrollable;
 
     public Color screenBackgroundColor;
 
@@ -118,7 +74,6 @@ public class StyleParams {
     public boolean forceTitlesDisplay;
     public Color bottomTabBadgeTextColor;
     public Color bottomTabBadgeBackgroundColor;
-    public Font bottomTabFontFamily;
 
     public Color navigationBarColor;
 }

@@ -1,6 +1,5 @@
 package com.reactnativenavigation.layouts;
 
-import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,29 +11,25 @@ import com.reactnativenavigation.events.EventBus;
 import com.reactnativenavigation.events.ScreenChangedEvent;
 import com.reactnativenavigation.params.ContextualMenuParams;
 import com.reactnativenavigation.params.FabParams;
-import com.reactnativenavigation.params.LightBoxParams;
 import com.reactnativenavigation.params.ScreenParams;
 import com.reactnativenavigation.params.SideMenuParams;
-import com.reactnativenavigation.params.SlidingOverlayParams;
 import com.reactnativenavigation.params.SnackbarParams;
 import com.reactnativenavigation.params.TitleBarButtonParams;
 import com.reactnativenavigation.params.TitleBarLeftButtonParams;
 import com.reactnativenavigation.screens.Screen;
 import com.reactnativenavigation.screens.ScreenStack;
 import com.reactnativenavigation.views.LeftButtonOnClickListener;
-import com.reactnativenavigation.views.LightBox;
 import com.reactnativenavigation.views.SideMenu;
 import com.reactnativenavigation.views.SideMenu.Side;
 import com.reactnativenavigation.views.SnackbarAndFabContainer;
-import com.reactnativenavigation.views.slidingOverlay.SlidingOverlay;
-import com.reactnativenavigation.views.slidingOverlay.SlidingOverlaysQueue;
 
 import java.util.List;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
-public class SingleScreenLayout extends BaseLayout {
+public class SingleScreenLayout extends RelativeLayout implements Layout {
 
+    private final AppCompatActivity activity;
     protected final ScreenParams screenParams;
     private final SideMenuParams leftSideMenuParams;
     private final SideMenuParams rightSideMenuParams;
@@ -42,12 +37,11 @@ public class SingleScreenLayout extends BaseLayout {
     private SnackbarAndFabContainer snackbarAndFabContainer;
     protected LeftButtonOnClickListener leftButtonOnClickListener;
     private @Nullable SideMenu sideMenu;
-    private final SlidingOverlaysQueue slidingOverlaysQueue = new SlidingOverlaysQueue();
-    private LightBox lightBox;
 
     public SingleScreenLayout(AppCompatActivity activity, SideMenuParams leftSideMenuParams,
                               SideMenuParams rightSideMenuParams, ScreenParams screenParams) {
         super(activity);
+        this.activity = activity;
         this.screenParams = screenParams;
         this.leftSideMenuParams = leftSideMenuParams;
         this.rightSideMenuParams = rightSideMenuParams;
@@ -80,7 +74,7 @@ public class SingleScreenLayout extends BaseLayout {
         if (stack != null) {
             stack.destroy();
         }
-        stack = new ScreenStack(getActivity(), parent, screenParams.getNavigatorId(), this);
+        stack = new ScreenStack(activity, parent, screenParams.getNavigatorId(), this);
         LayoutParams lp = new LayoutParams(MATCH_PARENT, MATCH_PARENT);
         pushInitialScreen(lp);
     }
@@ -128,44 +122,37 @@ public class SingleScreenLayout extends BaseLayout {
         if (sideMenu != null) {
             sideMenu.destroy();
         }
-        if (sideMenu != null) {
-            sideMenu.destroy();
-        }
-        if (lightBox != null) {
-            lightBox.destroy();
-        }
-        slidingOverlaysQueue.destroy();
     }
 
     @Override
     public void push(ScreenParams params) {
-        stack.push(params, new LayoutParams(MATCH_PARENT, MATCH_PARENT));
+        LayoutParams lp = new LayoutParams(MATCH_PARENT, MATCH_PARENT);
+        stack.push(params, lp);
         EventBus.instance.post(new ScreenChangedEvent(params));
     }
 
     @Override
     public void pop(ScreenParams params) {
-        stack.pop(params.animateScreenTransitions, new ScreenStack.OnScreenPop() {
-            @Override
-            public void onScreenPopAnimationEnd() {
-                EventBus.instance.post(new ScreenChangedEvent(stack.peek().getScreenParams()));
-            }
-        });
+        stack.pop(params.animateScreenTransitions);
+        EventBus.instance.post(new ScreenChangedEvent(stack.peek().getScreenParams()));
     }
 
     @Override
     public void popToRoot(ScreenParams params) {
-        stack.popToRoot(params.animateScreenTransitions, new ScreenStack.OnScreenPop() {
-            @Override
-            public void onScreenPopAnimationEnd() {
-                EventBus.instance.post(new ScreenChangedEvent(stack.peek().getScreenParams()));
-            }
-        });
+        stack.popToRoot(params.animateScreenTransitions);
+        EventBus.instance.post(new ScreenChangedEvent(stack.peek().getScreenParams()));
     }
 
     @Override
-    public void newStack(final ScreenParams params) {
-        stack.newStack(params, new LayoutParams(MATCH_PARENT, MATCH_PARENT));
+    public void newStack(ScreenParams params) {
+        removeView(stack.peek());
+        stack.destroy();
+
+        ScreenStack newStack = new ScreenStack(activity, getScreenStackParent(), params.getNavigatorId(), this);
+        LayoutParams lp = new LayoutParams(MATCH_PARENT, MATCH_PARENT);
+        newStack.pushInitialScreenWithAnimation(params, lp);
+        stack = newStack;
+
         EventBus.instance.post(new ScreenChangedEvent(params));
     }
 
@@ -202,7 +189,7 @@ public class SingleScreenLayout extends BaseLayout {
 
     @Override
     public void setFab(String screenInstanceId, String navigatorEventId, FabParams fabParams) {
-        stack.setFab(screenInstanceId, fabParams);
+        stack.setFab(screenInstanceId, navigatorEventId, fabParams);
     }
 
     @Override
@@ -220,67 +207,9 @@ public class SingleScreenLayout extends BaseLayout {
     }
 
     @Override
-    public void setSideMenuEnabled(boolean enabled, Side side) {
-        if (sideMenu != null) {
-            sideMenu.setEnabled(enabled, side);
-        }
-    }
-
-    @Override
     public void showSnackbar(SnackbarParams params) {
         final String navigatorEventId = stack.peek().getNavigatorEventId();
         snackbarAndFabContainer.showSnackbar(navigatorEventId, params);
-    }
-
-    @Override
-    public void dismissSnackbar() {
-        snackbarAndFabContainer.dismissSnackbar();
-    }
-
-    @Override
-    public void showLightBox(LightBoxParams params) {
-        if (lightBox == null) {
-            lightBox = new LightBox(getActivity(), new Runnable() {
-                @Override
-                public void run() {
-                    lightBox = null;
-                }
-            }, params);
-            lightBox.show();
-        }
-    }
-
-    @Override
-    public void dismissLightBox() {
-        if (lightBox != null) {
-            lightBox.hide();
-            lightBox = null;
-        }
-    }
-
-    @Override
-    public void selectTopTabByTabIndex(String screenInstanceId, int index) {
-        stack.selectTopTabByTabIndex(screenInstanceId, index);
-    }
-
-    @Override
-    public void selectTopTabByScreen(String screenInstanceId) {
-        stack.selectTopTabByScreen(screenInstanceId);
-    }
-
-    @Override
-    public void updateScreenStyle(String screenInstanceId, Bundle styleParams) {
-        stack.updateScreenStyle(screenInstanceId, styleParams);
-    }
-
-    @Override
-    public void showSlidingOverlay(final SlidingOverlayParams params) {
-        slidingOverlaysQueue.add(new SlidingOverlay(this, params));
-    }
-
-    @Override
-    public void hideSlidingOverlay() {
-        slidingOverlaysQueue.remove();
     }
 
     @Override

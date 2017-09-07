@@ -2,23 +2,24 @@ package com.reactnativenavigation.react;
 
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.JavaJSExecutor;
+import com.facebook.react.devsupport.DevSupportManager;
 import com.facebook.react.devsupport.ReactInstanceDevCommandsHandler;
 import com.reactnativenavigation.utils.ReflectionUtils;
 
-class JsDevReloadListenerReplacer {
+public class JsDevReloadListenerReplacer {
     private final ReactInstanceManager reactInstanceManager;
     private final Listener listener;
 
-    interface Listener {
+    public interface Listener {
         void onJsDevReload();
     }
 
-    JsDevReloadListenerReplacer(ReactInstanceManager reactInstanceManager, Listener listener) {
+    public JsDevReloadListenerReplacer(ReactInstanceManager reactInstanceManager, Listener listener) {
         this.reactInstanceManager = reactInstanceManager;
         this.listener = listener;
     }
 
-    void replace() {
+    public void replace() {
         ReactInstanceDevCommandsHandler originalHandler = getOriginalHandler();
         DevCommandsHandlerProxy proxy = new DevCommandsHandlerProxy(originalHandler, listener);
         replaceInReactInstanceManager(proxy);
@@ -26,7 +27,8 @@ class JsDevReloadListenerReplacer {
     }
 
     private void replaceInDevSupportManager(DevCommandsHandlerProxy proxy) {
-        Object devSupportManager = ReflectionUtils.getDeclaredField(reactInstanceManager, "mDevSupportManager");
+        DevSupportManager devSupportManager = (DevSupportManager)
+                ReflectionUtils.getDeclaredField(reactInstanceManager, "mDevSupportManager");
         ReflectionUtils.setField(devSupportManager, "mReactInstanceCommandsHandler", proxy);
     }
 
@@ -42,7 +44,7 @@ class JsDevReloadListenerReplacer {
         private ReactInstanceDevCommandsHandler originalReactHandler;
         private final Listener listener;
 
-        DevCommandsHandlerProxy(ReactInstanceDevCommandsHandler originalReactHandler, Listener listener) {
+        public DevCommandsHandlerProxy(ReactInstanceDevCommandsHandler originalReactHandler, Listener listener) {
             this.originalReactHandler = originalReactHandler;
             this.listener = listener;
         }

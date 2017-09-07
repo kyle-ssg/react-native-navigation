@@ -1,6 +1,5 @@
 package com.reactnativenavigation.bridge;
 
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import com.reactnativenavigation.NavigationApplication;
 import com.reactnativenavigation.react.ReactGateway;
@@ -10,12 +9,6 @@ public class EventEmitter {
 
     public EventEmitter(ReactGateway reactGateway) {
         this.reactGateway = reactGateway;
-    }
-
-    public void sendScreenChangedEvent(String eventId, String navigatorEventId) {
-        WritableMap map = Arguments.createMap();
-        map.putString("type", "ScreenChangedEvent");
-        sendNavigatorEvent(eventId, navigatorEventId, map);
     }
 
     public void sendNavigatorEvent(String eventId, String navigatorEventId) {
@@ -44,19 +37,5 @@ public class EventEmitter {
             return;
         }
         reactGateway.getReactEventEmitter().sendEvent(eventId, arguments);
-    }
-
-    public void sendEvent(String eventId) {
-        if (!NavigationApplication.instance.isReactContextInitialized()) {
-            return;
-        }
-        reactGateway.getReactEventEmitter().sendEvent(eventId, Arguments.createMap());
-    }
-
-    public void sendAppLaunchedEvent() {
-        if (!NavigationApplication.instance.isReactContextInitialized()) {
-            return;
-        }
-        reactGateway.getReactEventEmitter().sendEvent("RNN.appLaunched", Arguments.createMap());
     }
 }

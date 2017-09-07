@@ -22,11 +22,6 @@ public class SingleScreen extends Screen {
         addView(contentView, 0, createLayoutParams());
     }
 
-    @Override
-    public ContentView getContentView() {
-        return contentView;
-    }
-
     protected LayoutParams createLayoutParams() {
         LayoutParams params = new LayoutParams(MATCH_PARENT, MATCH_PARENT);
         if (screenParams.styleParams.drawScreenBelowTopBar) {

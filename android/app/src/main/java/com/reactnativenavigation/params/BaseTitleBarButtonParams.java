@@ -24,22 +24,10 @@ public class BaseTitleBarButtonParams {
     public StyleParams.Color disabledColor;
     public ShowAsAction showAsAction;
     public boolean enabled = true;
-    public boolean disableIconTint = false;
 
-    public void setStyleFromScreen(StyleParams styleParams) {
-        setColorFromScreenStyle(styleParams.titleBarButtonColor);
-    }
-
-    private void setColorFromScreenStyle(StyleParams.Color titleBarButtonColor) {
+    public void setColorFromScreenStyle(StyleParams.Color titleBarButtonColor) {
         if (!color.hasColor() && titleBarButtonColor.hasColor()) {
             color = titleBarButtonColor;
         }
-    }
-
-    public StyleParams.Color getColor() {
-        if (enabled) {
-            return color;
-        }
-        return disabledColor.hasColor() ? disabledColor : AppStyle.appStyle.titleBarDisabledButtonColor;
     }
 }

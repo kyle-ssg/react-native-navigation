@@ -2,7 +2,6 @@ package com.reactnativenavigation.controllers;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 
 public class ActivityCallbacks {
@@ -31,18 +30,6 @@ public class ActivityCallbacks {
     }
 
     public void onActivityDestroyed(Activity activity) {
-
-    }
-
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-
-    }
-
-    public void onNewIntent(Intent intent) {
-
-    }
-
-    public void onConfigurationChanged(Configuration newConfig) {
 
     }
 }
