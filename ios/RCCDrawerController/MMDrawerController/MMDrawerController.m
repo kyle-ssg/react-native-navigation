@@ -1177,6 +1177,7 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
 }
 
 #pragma mark - iOS 7 Status Bar Helpers
+-(UIViewController*)childViewControllerForStatusBarStyle{
     //return [self childViewControllerForSide:self.openSide];
     return [self childViewControllerForSide:MMDrawerSideNone];
 }
