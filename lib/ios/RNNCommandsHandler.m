@@ -1,12 +1,15 @@
 #import "RNNCommandsHandler.h"
-#import "RNNComponentViewController.h"
+#import "RNNNavigationOptions.h"
+#import "RNNRootViewController.h"
+#import "RNNSplitViewController.h"
+#import "RNNElementFinder.h"
+#import "React/RCTUIManager.h"
 #import "RNNErrorHandler.h"
 #import "RNNDefaultOptionsHelper.h"
 #import "UIViewController+RNNOptions.h"
 #import "React/RCTI18nUtil.h"
 #import "UIViewController+LayoutProtocol.h"
 #import "RNNLayoutManager.h"
-#import "UIViewController+Utils.h"
 
 static NSString* const setRoot	= @"setRoot";
 static NSString* const setStackRoot	= @"setStackRoot";
@@ -83,9 +86,9 @@ static NSString* const setDefaultOptions	= @"setDefaultOptions";
 - (void)mergeOptions:(NSString*)componentId options:(NSDictionary*)mergeOptions completion:(RNNTransitionCompletionBlock)completion {
 	[self assertReady];
 	
-	UIViewController<RNNLayoutProtocol>* vc = [RNNLayoutManager findComponentForId:componentId];
+	UIViewController<RNNLayoutProtocol>* vc = (UIViewController<RNNLayoutProtocol>*)[RNNLayoutManager findComponentForId:componentId];
 	RNNNavigationOptions* newOptions = [[RNNNavigationOptions alloc] initWithDict:mergeOptions];
-	if ([vc conformsToProtocol:@protocol(RNNLayoutProtocol)] || [vc isKindOfClass:[RNNComponentViewController class]]) {
+	if ([vc conformsToProtocol:@protocol(RNNLayoutProtocol)] || [vc isKindOfClass:[RNNRootViewController class]]) {
 		[CATransaction begin];
 		[CATransaction setCompletionBlock:completion];
 		
@@ -103,7 +106,7 @@ static NSString* const setDefaultOptions	= @"setDefaultOptions";
 	
 	UIViewController *rootViewController = UIApplication.sharedApplication.delegate.window.rootViewController;
 	[RNNDefaultOptionsHelper recrusivelySetDefaultOptions:defaultOptions onRootViewController:rootViewController];
-
+	
 	completion();
 }
 
@@ -116,13 +119,13 @@ static NSString* const setDefaultOptions	= @"setDefaultOptions";
 	if ([[newVc.resolveOptions.preview.reactTag getWithDefaultValue:@(0)] floatValue] > 0) {
 		UIViewController* vc = [RNNLayoutManager findComponentForId:componentId];
 		
-		if([vc isKindOfClass:[RNNComponentViewController class]]) {
-			RNNComponentViewController* rootVc = (RNNComponentViewController*)vc;
+		if([vc isKindOfClass:[RNNRootViewController class]]) {
+			RNNRootViewController* rootVc = (RNNRootViewController*)vc;
 			rootVc.previewController = newVc;
 			[newVc renderTreeAndWait:NO perform:nil];
 			
 			rootVc.previewCallback = ^(UIViewController *vcc) {
-				RNNComponentViewController* rvc  = (RNNComponentViewController*)vcc;
+				RNNRootViewController* rvc  = (RNNRootViewController*)vcc;
 				[self->_eventEmitter sendOnPreviewCompleted:componentId previewComponentId:newVc.layoutInfo.componentId];
 				if ([newVc.resolveOptions.preview.commit getWithDefaultValue:NO]) {
 					[CATransaction begin];
@@ -190,7 +193,7 @@ static NSString* const setDefaultOptions	= @"setDefaultOptions";
 - (void)pop:(NSString*)componentId commandId:(NSString*)commandId mergeOptions:(NSDictionary*)mergeOptions completion:(RNNTransitionCompletionBlock)completion rejection:(RCTPromiseRejectBlock)rejection {
 	[self assertReady];
 	
-	RNNComponentViewController *vc = (RNNComponentViewController*)[RNNLayoutManager findComponentForId:componentId];
+	RNNRootViewController *vc = (RNNRootViewController*)[RNNLayoutManager findComponentForId:componentId];
 	RNNNavigationOptions *options = [[RNNNavigationOptions alloc] initWithDict:mergeOptions];
 	[vc overrideOptions:options];
 	
@@ -216,7 +219,7 @@ static NSString* const setDefaultOptions	= @"setDefaultOptions";
 
 - (void)popTo:(NSString*)componentId commandId:(NSString*)commandId mergeOptions:(NSDictionary *)mergeOptions completion:(RNNTransitionCompletionBlock)completion rejection:(RCTPromiseRejectBlock)rejection {
 	[self assertReady];
-	RNNComponentViewController *vc = (RNNComponentViewController*)[RNNLayoutManager findComponentForId:componentId];
+	RNNRootViewController *vc = (RNNRootViewController*)[RNNLayoutManager findComponentForId:componentId];
 	RNNNavigationOptions *options = [[RNNNavigationOptions alloc] initWithDict:mergeOptions];
 	[vc overrideOptions:options];
 	
@@ -228,7 +231,7 @@ static NSString* const setDefaultOptions	= @"setDefaultOptions";
 
 - (void)popToRoot:(NSString*)componentId commandId:(NSString*)commandId mergeOptions:(NSDictionary *)mergeOptions completion:(RNNTransitionCompletionBlock)completion rejection:(RCTPromiseRejectBlock)rejection {
 	[self assertReady];
-	RNNComponentViewController *vc = (RNNComponentViewController*)[RNNLayoutManager findComponentForId:componentId];
+	RNNRootViewController *vc = (RNNRootViewController*)[RNNLayoutManager findComponentForId:componentId];
 	RNNNavigationOptions *options = [[RNNNavigationOptions alloc] initWithDict:mergeOptions];
 	[vc overrideOptions:options];
 	

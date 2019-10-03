@@ -9,6 +9,4 @@
 @property (nonatomic, strong) Bool* showTitle;
 @property (nonatomic, strong) Bool* visible;
 
-- (BOOL)hasValue;
-
 @end

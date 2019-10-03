@@ -1,6 +1,6 @@
-#import "RNNBottomTabsController.h"
+#import "RNNTabBarController.h"
 
-@implementation RNNBottomTabsController {
+@implementation RNNTabBarController {
 	NSUInteger _currentTabIndex;
 }
 
@@ -24,6 +24,10 @@
     return [super getTopBarHeight];
 }
 
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+	return self.selectedViewController.supportedInterfaceOrientations;
+}
+
 - (void)setSelectedIndexByComponentID:(NSString *)componentID {
 	for (id child in self.childViewControllers) {
 		UIViewController<RNNLayoutProtocol>* vc = child;
@@ -40,7 +44,7 @@
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-	return [[self presenter] getStatusBarStyle:self.resolveOptions];
+	return self.selectedViewController.preferredStatusBarStyle;
 }
 
 #pragma mark UITabBarControllerDelegate

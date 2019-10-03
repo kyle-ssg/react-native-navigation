@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
-#import "RNNComponentViewCreator.h"
+#import "RNNRootViewCreator.h"
 
-@interface RNNTestRootViewCreator : NSObject <RNNComponentViewCreator>
+@interface RNNTestRootViewCreator : NSObject <RNNRootViewCreator>
 
 @end

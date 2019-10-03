@@ -8,6 +8,7 @@
 
 @interface RNNBasePresenter ()
 @property(nonatomic, strong) RNNDotIndicatorPresenter* dotIndicatorPresenter;
+@property(nonatomic, strong) RNNNavigationOptions* defaultOptions;
 @end
 @implementation RNNBasePresenter
 
@@ -21,10 +22,6 @@
 - (void)bindViewController:(UIViewController <RNNLayoutProtocol> *)boundViewController {
     self.boundComponentId = boundViewController.layoutInfo.componentId;
     _boundViewController = boundViewController;
-}
-
-- (void)setDefaultOptions:(RNNNavigationOptions *)defaultOptions {
-    _defaultOptions = defaultOptions;
 }
 
 - (void)applyOptionsOnInit:(RNNNavigationOptions *)initialOptions {
@@ -85,66 +82,66 @@
     RNNNavigationOptions * withDefault = [options withDefault:_defaultOptions];
 
     if (withDefault.bottomTab.badge.hasValue && [viewController.parentViewController isKindOfClass:[UITabBarController class]]) {
-        [viewController setTabBarItemBadge:withDefault.bottomTab.badge.get];
+        [viewController rnn_setTabBarItemBadge:withDefault.bottomTab.badge.get];
     }
 
     if (withDefault.bottomTab.badgeColor.hasValue && [viewController.parentViewController isKindOfClass:[UITabBarController class]]) {
-        [viewController setTabBarItemBadgeColor:withDefault.bottomTab.badgeColor.get];
+        [viewController rnn_setTabBarItemBadgeColor:withDefault.bottomTab.badgeColor.get];
     }
 }
 
-- (void)mergeOptions:(RNNNavigationOptions *)options resolvedOptions:(RNNNavigationOptions *)resolvedOptions {
+- (void)mergeOptions:(RNNNavigationOptions *)newOptions currentOptions:(RNNNavigationOptions *)currentOptions {
     UIViewController *viewController = self.boundViewController;
-    if (options.bottomTab.badge.hasValue && [viewController.parentViewController isKindOfClass:[UITabBarController class]]) {
-        [viewController setTabBarItemBadge:options.bottomTab.badge.get];
+    if (newOptions.bottomTab.badge.hasValue && [viewController.parentViewController isKindOfClass:[UITabBarController class]]) {
+        [viewController rnn_setTabBarItemBadge:newOptions.bottomTab.badge.get];
     }
 
-    if (options.bottomTab.badgeColor.hasValue && [viewController.parentViewController isKindOfClass:[UITabBarController class]]) {
-        [viewController setTabBarItemBadgeColor:options.bottomTab.badgeColor.get];
+    if (newOptions.bottomTab.badgeColor.hasValue && [viewController.parentViewController isKindOfClass:[UITabBarController class]]) {
+        [viewController rnn_setTabBarItemBadgeColor:newOptions.bottomTab.badgeColor.get];
     }
 
-    if ([options.bottomTab.dotIndicator hasValue] && [viewController.parentViewController isKindOfClass:[UITabBarController class]]) {
-        [[self dotIndicatorPresenter] apply:viewController:options.bottomTab.dotIndicator];
+    if ([newOptions.bottomTab.dotIndicator hasValue] && [viewController.parentViewController isKindOfClass:[UITabBarController class]]) {
+        [[self dotIndicatorPresenter] apply:viewController:newOptions.bottomTab.dotIndicator];
     }
 
-    if (options.bottomTab.text.hasValue) {
-        RNNNavigationOptions *buttonsResolvedOptions = (RNNNavigationOptions *) [resolvedOptions overrideOptions:options];
+    if (newOptions.bottomTab.text.hasValue) {
+        RNNNavigationOptions *buttonsResolvedOptions = (RNNNavigationOptions *) [currentOptions overrideOptions:newOptions];
         UITabBarItem *tabItem = [RNNTabBarItemCreator updateTabBarItem:viewController.tabBarItem bottomTabOptions:buttonsResolvedOptions.bottomTab];
         viewController.tabBarItem = tabItem;
     }
 
-    if (options.bottomTab.icon.hasValue) {
-        RNNNavigationOptions *buttonsResolvedOptions = (RNNNavigationOptions *) [resolvedOptions overrideOptions:options];
+    if (newOptions.bottomTab.icon.hasValue) {
+        RNNNavigationOptions *buttonsResolvedOptions = (RNNNavigationOptions *) [currentOptions overrideOptions:newOptions];
         UITabBarItem *tabItem = [RNNTabBarItemCreator updateTabBarItem:viewController.tabBarItem bottomTabOptions:buttonsResolvedOptions.bottomTab];
         viewController.tabBarItem = tabItem;
     }
 
-    if (options.bottomTab.selectedIcon.hasValue) {
-        RNNNavigationOptions *buttonsResolvedOptions = (RNNNavigationOptions *) [resolvedOptions overrideOptions:options];
+    if (newOptions.bottomTab.selectedIcon.hasValue) {
+        RNNNavigationOptions *buttonsResolvedOptions = (RNNNavigationOptions *) [currentOptions overrideOptions:newOptions];
         UITabBarItem *tabItem = [RNNTabBarItemCreator updateTabBarItem:viewController.tabBarItem bottomTabOptions:buttonsResolvedOptions.bottomTab];
         viewController.tabBarItem = tabItem;
     }
 
-    if (options.bottomTab.textColor.hasValue) {
-        RNNNavigationOptions *buttonsResolvedOptions = (RNNNavigationOptions *) [resolvedOptions overrideOptions:options];
+    if (newOptions.bottomTab.textColor.hasValue) {
+        RNNNavigationOptions *buttonsResolvedOptions = (RNNNavigationOptions *) [currentOptions overrideOptions:newOptions];
         UITabBarItem *tabItem = [RNNTabBarItemCreator updateTabBarItem:viewController.tabBarItem bottomTabOptions:buttonsResolvedOptions.bottomTab];
         viewController.tabBarItem = tabItem;
     }
 
-    if (options.bottomTab.selectedTextColor.hasValue) {
-        RNNNavigationOptions *buttonsResolvedOptions = (RNNNavigationOptions *) [resolvedOptions overrideOptions:options];
+    if (newOptions.bottomTab.selectedTextColor.hasValue) {
+        RNNNavigationOptions *buttonsResolvedOptions = (RNNNavigationOptions *) [currentOptions overrideOptions:newOptions];
         UITabBarItem *tabItem = [RNNTabBarItemCreator updateTabBarItem:viewController.tabBarItem bottomTabOptions:buttonsResolvedOptions.bottomTab];
         viewController.tabBarItem = tabItem;
     }
 
-    if (options.bottomTab.iconColor.hasValue) {
-        RNNNavigationOptions *buttonsResolvedOptions = (RNNNavigationOptions *) [resolvedOptions overrideOptions:options];
+    if (newOptions.bottomTab.iconColor.hasValue) {
+        RNNNavigationOptions *buttonsResolvedOptions = (RNNNavigationOptions *) [currentOptions overrideOptions:newOptions];
         UITabBarItem *tabItem = [RNNTabBarItemCreator updateTabBarItem:viewController.tabBarItem bottomTabOptions:buttonsResolvedOptions.bottomTab];
         viewController.tabBarItem = tabItem;
     }
 
-    if (options.bottomTab.selectedIconColor.hasValue) {
-        RNNNavigationOptions *buttonsResolvedOptions = (RNNNavigationOptions *) [resolvedOptions overrideOptions:options];
+    if (newOptions.bottomTab.selectedIconColor.hasValue) {
+        RNNNavigationOptions *buttonsResolvedOptions = (RNNNavigationOptions *) [currentOptions overrideOptions:newOptions];
         UITabBarItem *tabItem = [RNNTabBarItemCreator updateTabBarItem:viewController.tabBarItem bottomTabOptions:buttonsResolvedOptions.bottomTab];
         viewController.tabBarItem = tabItem;
     }
@@ -164,29 +161,4 @@
 - (void)applyDotIndicator:(UIViewController *)child {
     [[self dotIndicatorPresenter] apply:child:[child resolveOptions].bottomTab.dotIndicator];
 }
-
-- (UIStatusBarStyle)getStatusBarStyle:(RNNNavigationOptions *)resolvedOptions {
-    RNNNavigationOptions *withDefault = [resolvedOptions withDefault:[self defaultOptions]];
-    if ([[withDefault.statusBar.style getWithDefaultValue:@"default"] isEqualToString:@"light"]) {
-        return UIStatusBarStyleLightContent;
-    } else {
-        return UIStatusBarStyleDefault;
-    }
-}
-
-- (UIInterfaceOrientationMask)getOrientation:(RNNNavigationOptions *)options {
-    return [options withDefault:[self defaultOptions]].layout.supportedOrientations;
-}
-
-- (BOOL)isStatusBarVisibility:(UINavigationController *)stack resolvedOptions:(RNNNavigationOptions *)resolvedOptions {
-    RNNNavigationOptions *withDefault = [resolvedOptions withDefault:[self defaultOptions]];
-    if (withDefault.statusBar.visible.hasValue) {
-        return ![withDefault.statusBar.visible get];
-    } else if ([withDefault.statusBar.hideWithTopBar getWithDefaultValue:NO]) {
-        return stack.isNavigationBarHidden;
-    }
-    return NO;
-}
-
-
 @end

@@ -1,6 +1,6 @@
 #import "RNNLayoutInfo.h"
 #import "RNNBasePresenter.h"
-#import "RNNComponentViewCreator.h"
+#import "RNNRootViewCreator.h"
 #import "RNNEventEmitter.h"
 
 typedef void (^RNNReactViewReadyCompletionBlock)(void);
@@ -10,7 +10,7 @@ typedef void (^RNNReactViewReadyCompletionBlock)(void);
 @required
 
 - (instancetype)initWithLayoutInfo:(RNNLayoutInfo *)layoutInfo
-						   creator:(id<RNNComponentViewCreator>)creator
+						   creator:(id<RNNRootViewCreator>)creator
 						   options:(RNNNavigationOptions *)options
 					defaultOptions:(RNNNavigationOptions *)defaultOptions
 						 presenter:(RNNBasePresenter *)presenter

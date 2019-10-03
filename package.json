@@ -1,26 +1,26 @@
 {
-  "_from": "react-native-navigation@3.2.0-snapshot.524",
-  "_id": "react-native-navigation@3.2.0-snapshot.524",
+  "_from": "react-native-navigation@3.1.0",
+  "_id": "react-native-navigation@3.1.0",
   "_inBundle": false,
-  "_integrity": "sha512-1fXf8wgwyrx3MGS3oeKHNU4Fq547mM9kohRTD58MednGAQLxhgglR0tBvKYkrYc/+PrbV3K1tV8UQHir0isDjw==",
+  "_integrity": "sha512-J6r4MgBftUrN4JzaMJ1rau4P0nnMJ7RCjQdIv4ZNSIyn4Hgn264mQyhIImnJB4YBIkgDgSmMffqsv68YadigBQ==",
   "_location": "/react-native-navigation",
   "_phantomChildren": {},
   "_requested": {
     "type": "version",
     "registry": true,
-    "raw": "react-native-navigation@3.2.0-snapshot.524",
+    "raw": "react-native-navigation@3.1.0",
     "name": "react-native-navigation",
     "escapedName": "react-native-navigation",
-    "rawSpec": "3.2.0-snapshot.524",
+    "rawSpec": "3.1.0",
     "saveSpec": null,
-    "fetchSpec": "3.2.0-snapshot.524"
+    "fetchSpec": "3.1.0"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/react-native-navigation/-/react-native-navigation-3.2.0-snapshot.524.tgz",
-  "_shasum": "60c09df9d06388dd4b11ac168219d507d2f352ba",
-  "_spec": "react-native-navigation@3.2.0-snapshot.524",
+  "_resolved": "https://registry.npmjs.org/react-native-navigation/-/react-native-navigation-3.1.0.tgz",
+  "_shasum": "2beea7d929875925d18fb374662bb1c92965adb3",
+  "_spec": "react-native-navigation@3.1.0",
   "_where": "/Users/kyle/dp-janus-b2c-frontend/mobile",
   "bugs": {
     "url": "https://github.com/wix/react-native-navigation/issues"
@@ -42,7 +42,7 @@
       "ios.none": {
         "binaryPath": "playground/ios/DerivedData/playground/Build/Products/Debug-iphonesimulator/playground.app",
         "type": "ios.none",
-        "name": "iPhone 11",
+        "name": "iPhone X",
         "session": {
           "server": "ws://localhost:8099",
           "sessionId": "playground"
@@ -52,13 +52,13 @@
         "binaryPath": "playground/ios/DerivedData/playground/Build/Products/Debug-iphonesimulator/playground.app",
         "build": "RCT_NO_LAUNCH_PACKAGER=true xcodebuild build -scheme playground -project playground/ios/playground.xcodeproj -sdk iphonesimulator -configuration Debug -derivedDataPath playground/ios/DerivedData/playground ONLY_ACTIVE_ARCH=YES -quiet -UseModernBuildSystem=NO",
         "type": "ios.simulator",
-        "name": "iPhone 11"
+        "name": "iPhone X"
       },
       "ios.sim.release": {
         "binaryPath": "playground/ios/DerivedData/playground/Build/Products/Release-iphonesimulator/playground.app",
         "build": "RCT_NO_LAUNCH_PACKAGER=true xcodebuild build -scheme playground_release -project playground/ios/playground.xcodeproj -sdk iphonesimulator -configuration Release -derivedDataPath playground/ios/DerivedData/playground ONLY_ACTIVE_ARCH=YES -quiet -UseModernBuildSystem=NO",
         "type": "ios.simulator",
-        "name": "iPhone 11"
+        "name": "iPhone X"
       },
       "android.emu.debug": {
         "binaryPath": "playground/android/app/build/outputs/apk/debug/app-debug.apk",
@@ -87,7 +87,6 @@
     }
   },
   "devDependencies": {
-    "@babel/core": "^7.5.5",
     "@babel/plugin-proposal-export-default-from": "7.2.0",
     "@babel/plugin-proposal-export-namespace-from": "7.2.0",
     "@types/hoist-non-react-statics": "^3.0.1",
@@ -96,7 +95,7 @@
     "@types/react": "16.x.x",
     "@types/react-native": "0.57.7",
     "@types/react-test-renderer": "16.x.x",
-    "detox": "14.x.x",
+    "detox": "12.x.x",
     "handlebars": "4.x.x",
     "jest": "24.0.0-alpha.6",
     "metro-react-native-babel-preset": "0.52.x",
@@ -189,5 +188,5 @@
     "xcode": "open playground/ios/playground.xcodeproj"
   },
   "typings": "lib/dist/index.d.ts",
-  "version": "3.2.0-snapshot.524"
+  "version": "3.1.0"
 }

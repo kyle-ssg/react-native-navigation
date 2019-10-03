@@ -5,7 +5,7 @@
 @implementation UIViewController (LayoutProtocol)
 
 - (instancetype)initWithLayoutInfo:(RNNLayoutInfo *)layoutInfo
-						   creator:(id<RNNComponentViewCreator>)creator
+						   creator:(id<RNNRootViewCreator>)creator
 						   options:(RNNNavigationOptions *)options
 					defaultOptions:(RNNNavigationOptions *)defaultOptions
 						 presenter:(RNNBasePresenter *)presenter
@@ -28,28 +28,17 @@
 	return self;
 }
 
-- (void)mergeOptions:(RNNNavigationOptions *)options {
-    [self.options overrideOptions:options];
-    [self.presenter mergeOptions:options resolvedOptions:self.resolveOptions];
-    [self.parentViewController mergeChildOptions:options];
-}
-
-- (void)mergeChildOptions:(RNNNavigationOptions *)options {
-    [self.presenter mergeOptions:options resolvedOptions:self.resolveOptions];
-	[self.parentViewController mergeChildOptions:options];
-}
-
 - (RNNNavigationOptions *)resolveOptions {
     return (RNNNavigationOptions *) [self.options mergeInOptions:self.getCurrentChild.resolveOptions.copy];
 }
 
-- (void)overrideOptions:(RNNNavigationOptions *)options {
-	[self.options overrideOptions:options];
+- (void)mergeOptions:(RNNNavigationOptions *)options {
+	[self.presenter mergeOptions:options currentOptions:self.options];
+	[self.parentViewController mergeOptions:options];
 }
 
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-	UIInterfaceOrientationMask interfaceOrientationMask = self.presenter ? [self.presenter getOrientation:[self resolveOptions]] : [[UIApplication sharedApplication] supportedInterfaceOrientationsForWindow:[[UIApplication sharedApplication] keyWindow]];
-	return interfaceOrientationMask;
+- (void)overrideOptions:(RNNNavigationOptions *)options {
+	[self.options overrideOptions:options];
 }
 
 - (void)renderTreeAndWait:(BOOL)wait perform:(RNNReactViewReadyCompletionBlock)readyBlock {
@@ -137,11 +126,11 @@
 	objc_setAssociatedObject(self, @selector(eventEmitter), eventEmitter, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (id<RNNComponentViewCreator>)creator {
+- (id<RNNRootViewCreator>)creator {
 	return objc_getAssociatedObject(self, @selector(creator));
 }
 
-- (void)setCreator:(id<RNNComponentViewCreator>)creator {
+- (void)setCreator:(id<RNNRootViewCreator>)creator {
 	objc_setAssociatedObject(self, @selector(creator), creator, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 

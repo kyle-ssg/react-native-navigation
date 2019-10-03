@@ -11,7 +11,7 @@
 
 @implementation RNNSideMenuController
 
-- (instancetype)initWithLayoutInfo:(RNNLayoutInfo *)layoutInfo creator:(id<RNNComponentViewCreator>)creator childViewControllers:(NSArray *)childViewControllers options:(RNNNavigationOptions *)options defaultOptions:(RNNNavigationOptions *)defaultOptions presenter:(RNNBasePresenter *)presenter eventEmitter:(RNNEventEmitter *)eventEmitter {
+- (instancetype)initWithLayoutInfo:(RNNLayoutInfo *)layoutInfo creator:(id<RNNRootViewCreator>)creator childViewControllers:(NSArray *)childViewControllers options:(RNNNavigationOptions *)options defaultOptions:(RNNNavigationOptions *)defaultOptions presenter:(RNNBasePresenter *)presenter eventEmitter:(RNNEventEmitter *)eventEmitter {
 	[self setControllers:childViewControllers];
 	self = [super initWithCenterViewController:self.center leftDrawerViewController:self.left rightDrawerViewController:self.right];
 	
@@ -32,10 +32,6 @@
 	self.edgesForExtendedLayout |= UIRectEdgeBottom;
 	
 	return self;
-}
-
-- (void)setDefaultOptions:(RNNNavigationOptions *)defaultOptions {
-	[self.presenter setDefaultOptions:defaultOptions];
 }
 
 - (void)setAnimationType:(NSString *)animationType {
@@ -96,7 +92,7 @@
 	for (id controller in controllers) {
 		if ([controller isKindOfClass:[RNNSideMenuChildVC class]]) {
 			RNNSideMenuChildVC *child = (RNNSideMenuChildVC*)controller;
-
+			
 			if (child.type == RNNSideMenuChildTypeCenter) {
 				self.center = child;
 			}
@@ -106,10 +102,10 @@
 			else if(child.type == RNNSideMenuChildTypeRight) {
 				self.right = child;
 			}
-
+			
 			[self addChildViewController:child];
 		}
-
+		
 		else {
 			@throw [NSException exceptionWithName:@"UnknownSideMenuControllerType" reason:[@"Unknown side menu type " stringByAppendingString:[controller description]] userInfo:nil];
 		}
@@ -120,8 +116,8 @@
 	return self.openedViewController.preferredStatusBarStyle;
 }
 
-- (UIViewController<RNNLayoutProtocol> *)getCurrentChild {
-	return self.openedViewController;
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+	return self.openedViewController.supportedInterfaceOrientations;
 }
 
 - (UIViewController *)openedViewController {
@@ -137,12 +133,8 @@
 	}
 }
 
-- (RNNNavigationOptions *)resolveOptions {
-    RNNNavigationOptions * options = super.resolveOptions;
-    if (self.openedViewController != self.center) {
-        [options.sideMenu mergeOptions:self.center.resolveOptions.sideMenu];
-    }
-    return options;
+- (UIViewController<RNNLayoutProtocol> *)getCurrentChild {
+	return self.center;
 }
 
 - (CGFloat)getTopBarHeight {

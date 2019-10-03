@@ -5,11 +5,11 @@ const NSInteger BLUR_TOPBAR_TAG = 78264802;
 
 @implementation UINavigationController (RNNOptions)
 
-- (void)setInteractivePopGestureEnabled:(BOOL)enabled {
+- (void)rnn_setInteractivePopGestureEnabled:(BOOL)enabled {
 	self.interactivePopGestureRecognizer.enabled = enabled;
 }
 
-- (void)setRootBackgroundImage:(UIImage *)backgroundImage {
+- (void)rnn_setRootBackgroundImage:(UIImage *)backgroundImage {
 	UIImageView* backgroundImageView = (self.view.subviews.count > 0) ? self.view.subviews[0] : nil;
 	if (![backgroundImageView isKindOfClass:[UIImageView class]]) {
 		backgroundImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
@@ -21,19 +21,19 @@ const NSInteger BLUR_TOPBAR_TAG = 78264802;
 	[backgroundImageView setContentMode:UIViewContentModeScaleAspectFill];
 }
 
-- (void)setNavigationBarTestId:(NSString *)testID {
+- (void)rnn_setNavigationBarTestID:(NSString *)testID {
 	self.navigationBar.accessibilityIdentifier = testID;
 }
 
-- (void)setNavigationBarVisible:(BOOL)visible animated:(BOOL)animated {
+- (void)rnn_setNavigationBarVisible:(BOOL)visible animated:(BOOL)animated {
 	[self setNavigationBarHidden:!visible animated:animated];
 }
 
-- (void)hideBarsOnScroll:(BOOL)hideOnScroll {
+- (void)rnn_hideBarsOnScroll:(BOOL)hideOnScroll {
 	self.hidesBarsOnSwipe = hideOnScroll;
 }
 
-- (void)setNavigationBarNoBorder:(BOOL)noBorder {
+- (void)rnn_setNavigationBarNoBorder:(BOOL)noBorder {
 	if (noBorder) {
 		[self.navigationBar setShadowImage:[[UIImage alloc] init]];
 	} else {
@@ -41,19 +41,19 @@ const NSInteger BLUR_TOPBAR_TAG = 78264802;
 	}
 }
 
-- (void)setBarStyle:(UIBarStyle)barStyle {
+- (void)rnn_setBarStyle:(UIBarStyle)barStyle {
 	self.navigationBar.barStyle = barStyle;
 }
 
-- (void)setNavigationBarFontFamily:(NSString *)fontFamily fontSize:(NSNumber *)fontSize fontWeight:(NSString *)fontWeight color:(UIColor *)color {
-	NSDictionary* fontAttributes = [RNNFontAttributesCreator createWithFontFamily:fontFamily fontSize:fontSize fontWeight:fontWeight color:color];
+- (void)rnn_setNavigationBarFontFamily:(NSString *)fontFamily fontSize:(NSNumber *)fontSize color:(UIColor *)color {
+	NSDictionary* fontAttributes = [RNNFontAttributesCreator createFontAttributesWithFontFamily:fontFamily fontSize:fontSize color:color];
 	
 	if (fontAttributes.allKeys.count > 0) {
 		self.navigationBar.titleTextAttributes = fontAttributes;
 	}
 }
 
-- (void)setNavigationBarLargeTitleVisible:(BOOL)visible {
+- (void)rnn_setNavigationBarLargeTitleVisible:(BOOL)visible {
 	if (@available(iOS 11.0, *)) {
 		if (visible){
 			self.navigationBar.prefersLargeTitles = YES;
@@ -63,18 +63,18 @@ const NSInteger BLUR_TOPBAR_TAG = 78264802;
 	}
 }
 
-- (void)setNavigationBarLargeTitleFontFamily:(NSString *)fontFamily fontSize:(NSNumber *)fontSize fontWeight:(NSString *)fontWeight color:(UIColor *)color {
+- (void)rnn_setNavigationBarLargeTitleFontFamily:(NSString *)fontFamily fontSize:(NSNumber *)fontSize color:(UIColor *)color {
 	if (@available(iOS 11.0, *)) {
-		NSDictionary* fontAttributes = [RNNFontAttributesCreator createWithFontFamily:fontFamily fontSize:fontSize fontWeight:fontWeight color:color];
+		NSDictionary* fontAttributes = [RNNFontAttributesCreator createFontAttributesWithFontFamily:fontFamily fontSize:fontSize color:color];
 		self.navigationBar.largeTitleTextAttributes = fontAttributes;
 	}
 }
 
-- (void)setNavigationBarTranslucent:(BOOL)translucent {
+- (void)rnn_setNavigationBarTranslucent:(BOOL)translucent {
 	self.navigationBar.translucent = translucent;
 }
 
-- (void)setNavigationBarBlur:(BOOL)blur {
+- (void)rnn_setNavigationBarBlur:(BOOL)blur {
 	if (blur && ![self.navigationBar viewWithTag:BLUR_TOPBAR_TAG]) {
 		[self.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
 		self.navigationBar.shadowImage = [UIImage new];
@@ -95,11 +95,11 @@ const NSInteger BLUR_TOPBAR_TAG = 78264802;
 	}
 }
 
-- (void)setBackButtonColor:(UIColor *)color {
+- (void)rnn_setBackButtonColor:(UIColor *)color {
 	self.navigationBar.tintColor = color;
 }
 
-- (void)setNavigationBarClipsToBounds:(BOOL)clipsToBounds {
+- (void)rnn_setNavigationBarClipsToBounds:(BOOL)clipsToBounds {
 	self.navigationBar.clipsToBounds = clipsToBounds;
 }
 

@@ -1,5 +1,5 @@
-#import "RNNComponentPresenter.h"
+#import "RNNViewControllerPresenter.h"
 
-@interface RNNSplitViewControllerPresenter : RNNComponentPresenter
+@interface RNNSplitViewControllerPresenter : RNNViewControllerPresenter
 
 @end

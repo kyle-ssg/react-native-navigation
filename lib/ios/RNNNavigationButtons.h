@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "RNNButtonOptions.h"
-#import "RNNComponentViewCreator.h"
+#import "RNNRootViewCreator.h"
 #import "RNNReactComponentRegistry.h"
 
 @interface RNNNavigationButtons : NSObject

@@ -1,46 +1,46 @@
 #import <XCTest/XCTest.h>
 #import <OCMock/OCMock.h>
-#import "RNNStackPresenter.h"
+#import "RNNNavigationControllerPresenter.h"
 #import "UINavigationController+RNNOptions.h"
-#import "RNNStackController.h"
+#import "RNNNavigationController.h"
 
-@interface RNNStackPresenterTest : XCTestCase
+@interface RNNNavigationControllerPresenterTest : XCTestCase
 
-@property (nonatomic, strong) RNNStackPresenter *uut;
+@property (nonatomic, strong) RNNNavigationControllerPresenter *uut;
 @property (nonatomic, strong) RNNNavigationOptions *options;
-@property (nonatomic, strong) id boundViewController;
+@property (nonatomic, strong) id bindedViewController;
 
 @end
 
-@implementation RNNStackPresenterTest
+@implementation RNNNavigationControllerPresenterTest
 
 - (void)setUp {
 	[super setUp];
-	self.uut = [[RNNStackPresenter alloc] init];
-	self.boundViewController = [OCMockObject partialMockForObject:[RNNStackController new]];
-	[self.uut bindViewController:self.boundViewController];
+	self.uut = [[RNNNavigationControllerPresenter alloc] init];
+	self.bindedViewController = [OCMockObject partialMockForObject:[RNNNavigationController new]];
+	[self.uut bindViewController:self.bindedViewController];
 	self.options = [[RNNNavigationOptions alloc] initEmptyOptions];
 }
 
 - (void)testApplyOptions_shouldSetBackButtonColor_withDefaultValues {
-	[[_boundViewController expect] setBackButtonColor:nil];
+	[[_bindedViewController expect] rnn_setBackButtonColor:nil];
 	[self.uut applyOptions:self.options];
-	[_boundViewController verify];
+	[_bindedViewController verify];
 }
 
 - (void)testApplyOptions_shouldSetBackButtonColor_withColor {
 	self.options.topBar.backButton.color = [[Color alloc] initWithValue:[UIColor redColor]];
-	[[_boundViewController expect] setBackButtonColor:[UIColor redColor]];
+	[[_bindedViewController expect] rnn_setBackButtonColor:[UIColor redColor]];
 	[self.uut applyOptions:self.options];
-	[_boundViewController verify];
+	[_bindedViewController verify];
 }
 
 - (void)testApplyOptionsBeforePoppingShouldSetTopBarBackgroundForPoppingViewController {
 	_options.topBar.background.color = [[Color alloc] initWithValue:[UIColor redColor]];
 	
-	[[_boundViewController expect] setTopBarBackgroundColor:_options.topBar.background.color.get];
+	[[_bindedViewController expect] setTopBarBackgroundColor:_options.topBar.background.color.get];
 	[self.uut applyOptionsBeforePopping:self.options];
-	[_boundViewController verify];
+	[_bindedViewController verify];
 }
 
 - (void)testApplyOptionsBeforePoppingShouldSetLargeTitleForPoppingViewController {

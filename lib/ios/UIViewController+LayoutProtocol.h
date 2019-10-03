@@ -12,8 +12,6 @@ typedef void (^RNNReactViewReadyCompletionBlock)(void);
 
 - (void)mergeOptions:(RNNNavigationOptions *)options;
 
-- (void)mergeChildOptions:(RNNNavigationOptions *)options;
-
 - (RNNNavigationOptions *)resolveOptions;
 
 - (void)setDefaultOptions:(RNNNavigationOptions *)defaultOptions;
@@ -25,6 +23,6 @@ typedef void (^RNNReactViewReadyCompletionBlock)(void);
 @property (nonatomic, strong) RNNNavigationOptions* options;
 @property (nonatomic, strong) RNNNavigationOptions* defaultOptions;
 @property (nonatomic, strong) RNNEventEmitter* eventEmitter;
-@property (nonatomic) id<RNNComponentViewCreator> creator;
+@property (nonatomic) id<RNNRootViewCreator> creator;
 
 @end

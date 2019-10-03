@@ -1,7 +1,7 @@
 #import "RNNReactComponentRegistry.h"
 
 @interface RNNReactComponentRegistry () {
-	id<RNNComponentViewCreator> _creator;
+	id<RNNRootViewCreator> _creator;
 	NSMapTable* _componentStore;
 }
 
@@ -9,7 +9,7 @@
 
 @implementation RNNReactComponentRegistry
 
-- (instancetype)initWithCreator:(id<RNNComponentViewCreator>)creator {
+- (instancetype)initWithCreator:(id<RNNRootViewCreator>)creator {
 	self = [super init];
 	_creator = creator;
 	_componentStore = [NSMapTable new];
@@ -19,10 +19,10 @@
 - (RNNReactView *)createComponentIfNotExists:(RNNComponentOptions *)component parentComponentId:(NSString *)parentComponentId reactViewReadyBlock:(RNNReactViewReadyCompletionBlock)reactViewReadyBlock {
 	NSMutableDictionary* parentComponentDict = [self componentsForParentId:parentComponentId];
 	
-	RNNReactView* reactView = parentComponentDict[component.componentId.get];
+	RNNReactView* reactView = [parentComponentDict objectForKey:component.componentId.get];
 	if (!reactView) {
 		reactView = (RNNReactView *)[_creator createRootViewFromComponentOptions:component reactViewReadyBlock:reactViewReadyBlock];
-		parentComponentDict[component.componentId.get] = reactView;
+		[parentComponentDict setObject:reactView forKey:component.componentId.get];
 	} else if (reactViewReadyBlock) {
 		reactViewReadyBlock();
 	}
@@ -45,17 +45,6 @@
 - (void)removeComponent:(NSString *)componentId {
 	if ([_componentStore objectForKey:componentId]) {
 		[_componentStore removeObjectForKey:componentId];
-	}
-}
-
-- (void)removeChildComponent:(NSString *)childId {
-	NSMutableDictionary* parent;
-	NSEnumerator *enumerator = _componentStore.objectEnumerator;
-	while ((parent = enumerator.nextObject)) {
-		if (parent[childId]) {
-			[parent removeObjectForKey:childId];
-			return;
-		}
 	}
 }
 

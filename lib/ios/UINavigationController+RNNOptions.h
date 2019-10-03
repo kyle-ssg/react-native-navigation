@@ -2,32 +2,32 @@
 
 @interface UINavigationController (RNNOptions)
 
-- (void)setInteractivePopGestureEnabled:(BOOL)enabled;
+- (void)rnn_setInteractivePopGestureEnabled:(BOOL)enabled;
 
-- (void)setRootBackgroundImage:(UIImage *)backgroundImage;
+- (void)rnn_setRootBackgroundImage:(UIImage *)backgroundImage;
 
-- (void)setNavigationBarTestId:(NSString *)testID;
+- (void)rnn_setNavigationBarTestID:(NSString *)testID;
 
-- (void)setNavigationBarVisible:(BOOL)visible animated:(BOOL)animated;
+- (void)rnn_setNavigationBarVisible:(BOOL)visible animated:(BOOL)animated;
 
-- (void)hideBarsOnScroll:(BOOL)hideOnScroll;
+- (void)rnn_hideBarsOnScroll:(BOOL)hideOnScroll;
 
-- (void)setNavigationBarNoBorder:(BOOL)noBorder;
+- (void)rnn_setNavigationBarNoBorder:(BOOL)noBorder;
 
-- (void)setBarStyle:(UIBarStyle)barStyle;
+- (void)rnn_setBarStyle:(UIBarStyle)barStyle;
 
-- (void)setNavigationBarFontFamily:(NSString *)fontFamily fontSize:(NSNumber *)fontSize fontWeight:(NSString *)fontWeight color:(UIColor *)color;
+- (void)rnn_setNavigationBarFontFamily:(NSString *)fontFamily fontSize:(NSNumber *)fontSize color:(UIColor *)color;
 
-- (void)setNavigationBarTranslucent:(BOOL)translucent;
+- (void)rnn_setNavigationBarTranslucent:(BOOL)translucent;
 
-- (void)setNavigationBarBlur:(BOOL)blur;
+- (void)rnn_setNavigationBarBlur:(BOOL)blur;
 
-- (void)setNavigationBarClipsToBounds:(BOOL)clipsToBounds;
+- (void)rnn_setNavigationBarClipsToBounds:(BOOL)clipsToBounds;
 
-- (void)setNavigationBarLargeTitleVisible:(BOOL)visible;
+- (void)rnn_setNavigationBarLargeTitleVisible:(BOOL)visible;
 
-- (void)setNavigationBarLargeTitleFontFamily:(NSString *)fontFamily fontSize:(NSNumber *)fontSize fontWeight:(NSString *)fontWeight color:(UIColor *)color;
+- (void)rnn_setNavigationBarLargeTitleFontFamily:(NSString *)fontFamily fontSize:(NSNumber *)fontSize color:(UIColor *)color;
 
-- (void)setBackButtonColor:(UIColor *)color;
+- (void)rnn_setBackButtonColor:(UIColor *)color;
 
 @end

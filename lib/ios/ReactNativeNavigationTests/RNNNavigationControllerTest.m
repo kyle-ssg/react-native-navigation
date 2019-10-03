@@ -1,19 +1,19 @@
 #import <XCTest/XCTest.h>
 #import <OCMock/OCMock.h>
-#import "RNNStackController.h"
-#import "RNNComponentViewController.h"
+#import "RNNNavigationController.h"
+#import "RNNRootViewController.h"
 #import "RNNTestRootViewCreator.h"
 
 @interface RNNNavigationControllerTest : XCTestCase
 
-@property (nonatomic, strong) RNNStackController *uut;
+@property (nonatomic, strong) RNNNavigationController *uut;
 
 @end
 
 @implementation RNNNavigationControllerTest {
-	RNNComponentViewController* _vc1;
+	RNNRootViewController* _vc1;
 	id _vc2Mock;
-	RNNComponentViewController* _vc2;
+	RNNRootViewController* _vc2;
 	UIViewController* _vc3;
 	RNNNavigationOptions* _options;
 	RNNTestRootViewCreator* _creator;
@@ -22,12 +22,12 @@
 - (void)setUp {
     [super setUp];
 	_creator = [[RNNTestRootViewCreator alloc] init];
-	_vc1 = [[RNNComponentViewController alloc] initWithLayoutInfo:nil rootViewCreator:nil eventEmitter:nil presenter:[OCMockObject partialMockForObject:[[RNNComponentPresenter alloc] init]] options:[[RNNNavigationOptions alloc] initEmptyOptions] defaultOptions:[[RNNNavigationOptions alloc] initEmptyOptions]];
-	_vc2 = [[RNNComponentViewController alloc] initWithLayoutInfo:nil rootViewCreator:nil eventEmitter:nil presenter:[[RNNComponentPresenter alloc] init] options:[[RNNNavigationOptions alloc] initEmptyOptions] defaultOptions:[[RNNNavigationOptions alloc] initEmptyOptions]];
+	_vc1 = [[RNNRootViewController alloc] initWithLayoutInfo:nil rootViewCreator:nil eventEmitter:nil presenter:[OCMockObject partialMockForObject:[[RNNViewControllerPresenter alloc] init]] options:[[RNNNavigationOptions alloc] initEmptyOptions]  defaultOptions:[[RNNNavigationOptions alloc] initEmptyOptions]];
+	_vc2 = [[RNNRootViewController alloc] initWithLayoutInfo:nil rootViewCreator:nil eventEmitter:nil presenter:[[RNNViewControllerPresenter alloc] init] options:[[RNNNavigationOptions alloc] initEmptyOptions] defaultOptions:[[RNNNavigationOptions alloc] initEmptyOptions]];
 	_vc2Mock = [OCMockObject partialMockForObject:_vc2];
 	_vc3 = [UIViewController new];
 	_options = [OCMockObject partialMockForObject:[[RNNNavigationOptions alloc] initEmptyOptions]];
-	self.uut = [[RNNStackController alloc] initWithLayoutInfo:nil creator:_creator options:_options defaultOptions:nil presenter:[OCMockObject partialMockForObject:[[RNNStackPresenter alloc] init]] eventEmitter:nil childViewControllers:@[_vc1, _vc2]];
+	self.uut = [[RNNNavigationController alloc] initWithLayoutInfo:nil creator:_creator options:_options defaultOptions:nil presenter:[OCMockObject partialMockForObject:[[RNNNavigationControllerPresenter alloc] init]] eventEmitter:nil childViewControllers:@[_vc1, _vc2]];
 }
 
 - (void)testInitWithLayoutInfo_shouldBindPresenter {
@@ -35,7 +35,7 @@
 }
 
 - (void)testInitWithLayoutInfo_shouldSetMultipleViewControllers {
-	self.uut = [[RNNStackController alloc] initWithLayoutInfo:nil creator:_creator options:[[RNNNavigationOptions alloc] initWithDict:@{}] defaultOptions:nil presenter:[[RNNComponentPresenter alloc] init] eventEmitter:nil childViewControllers:@[_vc1, _vc2]];
+	self.uut = [[RNNNavigationController alloc] initWithLayoutInfo:nil creator:_creator options:[[RNNNavigationOptions alloc] initWithDict:@{}] defaultOptions:nil presenter:[[RNNViewControllerPresenter alloc] init] eventEmitter:nil childViewControllers:@[_vc1, _vc2]];
 	XCTAssertTrue(self.uut.viewControllers.count == 2);
 }
 
@@ -113,7 +113,7 @@
 }
 
 - (void)testPopViewControllerReturnLastChildViewController {
-	RNNStackController* uut = [RNNStackController new];
+	RNNNavigationController* uut = [RNNNavigationController new];
 	[uut setViewControllers:@[_vc1, _vc2]];
 	XCTAssertEqual([uut popViewControllerAnimated:NO], _vc2);
 }
@@ -135,7 +135,7 @@
 }
 
 - (void)testPopViewControllerShouldInvokeApplyOptionsBeforePoppingForDestinationViewController {
-	RNNStackController* uut = [RNNStackController new];
+	RNNNavigationController* uut = [RNNNavigationController new];
 	[uut setViewControllers:@[_vc1, _vc2]];
 	
 	[[(id)uut.presenter expect] applyOptionsBeforePopping:[OCMArg any]];
@@ -190,8 +190,8 @@
 	XCTAssertNil(self.uut.navigationBar.barTintColor);
 }
 
-- (RNNStackController *)createNavigationControllerWithOptions:(RNNNavigationOptions *)options {
-	RNNStackController* nav = [[RNNStackController alloc] initWithLayoutInfo:nil creator:_creator options:options defaultOptions:nil presenter:[[RNNStackPresenter alloc] init] eventEmitter:nil childViewControllers:@[_vc1]];
+- (RNNNavigationController *)createNavigationControllerWithOptions:(RNNNavigationOptions *)options {
+	RNNNavigationController* nav = [[RNNNavigationController alloc] initWithLayoutInfo:nil creator:_creator options:options defaultOptions:nil presenter:[[RNNNavigationControllerPresenter alloc] init] eventEmitter:nil childViewControllers:@[_vc1]];
 	return nav;
 }
 

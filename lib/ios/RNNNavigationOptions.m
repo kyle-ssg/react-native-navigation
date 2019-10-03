@@ -1,10 +1,10 @@
 #import "RNNNavigationOptions.h"
 #import <React/RCTConvert.h>
-#import "RNNStackController.h"
-#import "RNNBottomTabsController.h"
+#import "RNNNavigationController.h"
+#import "RNNTabBarController.h"
 #import "RNNTopBarOptions.h"
 #import "RNNSideMenuController.h"
-#import "RNNComponentViewController.h"
+#import "RNNRootViewController.h"
 #import "RNNSplitViewController.h"
 #import "RNNNavigationButtons.h"
 #import "RNNSplitViewOptions.h"

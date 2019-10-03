@@ -2,7 +2,7 @@
 #import "RNNNavigationButtons.h"
 #import "RNNReactComponentRegistry.h"
 
-@interface RNNComponentPresenter : RNNBasePresenter
+@interface RNNViewControllerPresenter : RNNBasePresenter
 
 - (instancetype)initWithComponentRegistry:(RNNReactComponentRegistry *)componentRegistry:(RNNNavigationOptions *)defaultOptions;
 

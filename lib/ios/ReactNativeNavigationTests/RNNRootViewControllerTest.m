@@ -1,23 +1,23 @@
 #import <XCTest/XCTest.h>
 #import <OCMock/OCMock.h>
-#import "RNNComponentViewController.h"
+#import "RNNRootViewController.h"
 #import "RNNReactRootViewCreator.h"
 #import "RNNTestRootViewCreator.h"
 #import <React/RCTConvert.h>
 #import "RNNNavigationOptions.h"
-#import "RNNStackController.h"
-#import "RNNBottomTabsController.h"
+#import "RNNNavigationController.h"
+#import "RNNTabBarController.h"
 #import "RNNUIBarButtonItem.h"
 
 
-@interface RNNComponentViewController (EmbedInTabBar)
+@interface RNNRootViewController (EmbedInTabBar)
 - (void)embedInTabBarController;
 @end
 
-@implementation RNNComponentViewController (EmbedInTabBar)
+@implementation RNNRootViewController (EmbedInTabBar)
 
 - (void)embedInTabBarController {
-	RNNBottomTabsController* tabVC = [[RNNBottomTabsController alloc] init];
+	RNNTabBarController* tabVC = [[RNNTabBarController alloc] init];
 	tabVC.viewControllers = @[self];
 	[self viewWillAppear:false];
 }
@@ -26,13 +26,13 @@
 
 @interface RNNRootViewControllerTest : XCTestCase
 
-@property (nonatomic, strong) id<RNNComponentViewCreator> creator;
+@property (nonatomic, strong) id<RNNRootViewCreator> creator;
 @property (nonatomic, strong) NSString* pageName;
 @property (nonatomic, strong) NSString* componentId;
 @property (nonatomic, strong) id emitter;
 @property (nonatomic, strong) RNNNavigationOptions* options;
 @property (nonatomic, strong) RNNLayoutInfo* layoutInfo;
-@property (nonatomic, strong) RNNComponentViewController* uut;
+@property (nonatomic, strong) RNNRootViewController* uut;
 @end
 
 @implementation RNNRootViewControllerTest
@@ -49,14 +49,14 @@
 	layoutInfo.componentId = self.componentId;
 	layoutInfo.name = self.pageName;
 	
-	id presenter = [OCMockObject partialMockForObject:[[RNNComponentPresenter alloc] init]];
-	self.uut = [[RNNComponentViewController alloc] initWithLayoutInfo:layoutInfo rootViewCreator:self.creator eventEmitter:self.emitter presenter:presenter options:self.options defaultOptions:nil];
+	id presenter = [OCMockObject partialMockForObject:[[RNNViewControllerPresenter alloc] init]];
+	self.uut = [[RNNRootViewController alloc] initWithLayoutInfo:layoutInfo rootViewCreator:self.creator eventEmitter:self.emitter presenter:presenter options:self.options defaultOptions:nil];
 }
 
 -(void)testTopBarBackgroundColor_validColor{
 	NSNumber* inputColor = @(0xFFFF0000);
 	self.options.topBar.background.color = [[Color alloc] initWithValue:[RCTConvert UIColor:inputColor]];
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	UIColor* expectedColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:1];
 
@@ -101,7 +101,7 @@
 - (void)testStatusBarHideWithTopBar_true {
 	self.options.statusBar.hideWithTopBar = [[Bool alloc] initWithValue:@(1)];
 	self.options.topBar.visible = [[Bool alloc] initWithValue:@(0)];
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 
 	[self.uut viewWillAppear:false];
 
@@ -124,7 +124,7 @@
 -(void)testTopBarTextColor_validColor{
 	UIColor* inputColor = [RCTConvert UIColor:@(0xFFFF0000)];
 	self.options.topBar.title.color = [[Color alloc] initWithValue:inputColor];
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	UIColor* expectedColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:1];
 	XCTAssertTrue([self.uut.navigationController.navigationBar.titleTextAttributes[@"NSColor"] isEqual:expectedColor]);
@@ -140,7 +140,7 @@
 
 -(void)testTopBarTextFontFamily_validFont{
 	NSString* inputFont = @"HelveticaNeue";
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	self.options.topBar.title.fontFamily = [[Text alloc] initWithValue:inputFont];
 	[self.uut viewWillAppear:false];
 	UIFont* expectedFont = [UIFont fontWithName:inputFont size:17];
@@ -149,7 +149,7 @@
 
 -(void)testTopBarHideOnScroll_true {
 	NSNumber* hideOnScrollInput = @(1);
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	self.options.topBar.hideOnScroll = [[Bool alloc] initWithValue:hideOnScrollInput];;
 	[self.uut viewWillAppear:false];
 	XCTAssertTrue(self.uut.navigationController.hidesBarsOnSwipe);
@@ -158,7 +158,7 @@
 -(void)testTopBarTranslucent {
 	NSNumber* topBarTranslucentInput = @(0);
 	self.options.topBar.background.translucent = [[Bool alloc] initWithValue:topBarTranslucentInput];
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	XCTAssertFalse(self.uut.navigationController.navigationBar.translucent);
 }
@@ -166,7 +166,7 @@
 -(void)testTabBadge {
 	NSString* tabBadgeInput = @"5";
 	self.options.bottomTab.badge = [[Text alloc] initWithValue:tabBadgeInput];
-	__unused RNNBottomTabsController* vc = [[RNNBottomTabsController alloc] init];
+	__unused RNNTabBarController* vc = [[RNNTabBarController alloc] init];
 	NSMutableArray* controllers = [NSMutableArray new];
 	UITabBarItem* item = [[UITabBarItem alloc] initWithTitle:@"A Tab" image:nil tag:1];
 	[self.uut setTabBarItem:item];
@@ -180,7 +180,7 @@
 -(void)testTopBarTransparent_BOOL_True {
 	UIColor* transparentColor = [RCTConvert UIColor:@(0x00000000)];
 	self.options.topBar.background.color = [[Color alloc] initWithValue:transparentColor];
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	UIView* transparentView = [self.uut.navigationController.navigationBar viewWithTag:TOP_BAR_TRANSPARENT_TAG];
 	XCTAssertTrue(transparentView);
@@ -189,7 +189,7 @@
 
 -(void)testTopBarTransparent_BOOL_false {
 	UIColor* inputColor = [RCTConvert UIColor:@(0xFFFF0000)];
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	self.options.topBar.background.color = [[Color alloc] initWithValue:inputColor];
 	[self.uut viewWillAppear:false];
 	UIView* transparentView = [self.uut.navigationController.navigationBar viewWithTag:TOP_BAR_TRANSPARENT_TAG];
@@ -220,7 +220,7 @@
 -(void)testTopBarLargeTitleFontSize_withoutTextFontFamily_withoutTextColor {
 	NSNumber* topBarTextFontSizeInput = @(15);
 	self.options.topBar.largeTitle.fontSize = [[Number alloc] initWithValue:topBarTextFontSizeInput];
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	UIFont* expectedFont = [UIFont systemFontOfSize:15];
 
@@ -232,7 +232,7 @@
 	UIColor* inputColor = [RCTConvert UIColor:@(0xFFFF0000)];
 	self.options.topBar.largeTitle.fontSize = [[Number alloc] initWithValue:topBarTextFontSizeInput];
 	self.options.topBar.largeTitle.color = [[Color alloc] initWithValue:inputColor];
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	UIFont* expectedFont = [UIFont systemFontOfSize:15];
 	UIColor* expectedColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:1];
@@ -248,7 +248,7 @@
 	self.options.topBar.largeTitle.color = [[Color alloc] initWithValue:inputColor];
 	self.options.topBar.largeTitle.fontFamily = [[Text alloc] initWithValue:inputFont];
 	
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	UIColor* expectedColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:1];
 	UIFont* expectedFont = [UIFont fontWithName:inputFont size:15];
@@ -261,7 +261,7 @@
 	NSString* inputFont = @"HelveticaNeue";
 	self.options.topBar.largeTitle.fontSize = [[Number alloc] initWithValue:topBarTextFontSizeInput];
 	self.options.topBar.largeTitle.fontFamily = [[Text alloc] initWithValue:inputFont];
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	UIFont* expectedFont = [UIFont fontWithName:inputFont size:15];
 	XCTAssertTrue([self.uut.navigationController.navigationBar.largeTitleTextAttributes[@"NSFont"] isEqual:expectedFont]);
@@ -271,7 +271,7 @@
 -(void)testTopBarTextFontSize_withoutTextFontFamily_withoutTextColor {
 	NSNumber* topBarTextFontSizeInput = @(15);
 	self.options.topBar.title.fontSize = [[Number alloc] initWithValue:topBarTextFontSizeInput];
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	UIFont* expectedFont = [UIFont systemFontOfSize:15];
 	XCTAssertTrue([self.uut.navigationController.navigationBar.titleTextAttributes[@"NSFont"] isEqual:expectedFont]);
@@ -282,7 +282,7 @@
 	UIColor* inputColor = [RCTConvert UIColor:@(0xFFFF0000)];
 	self.options.topBar.title.fontSize = [[Number alloc] initWithValue:topBarTextFontSizeInput];
 	self.options.topBar.title.color = [[Color alloc] initWithValue:inputColor];
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	UIFont* expectedFont = [UIFont systemFontOfSize:15];
 	UIColor* expectedColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:1];
@@ -297,7 +297,7 @@
 	self.options.topBar.title.fontSize = [[Number alloc] initWithValue:topBarTextFontSizeInput];
 	self.options.topBar.title.color = [[Color alloc] initWithValue:inputColor];
 	self.options.topBar.title.fontFamily = [[Text alloc] initWithValue:inputFont];
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	UIColor* expectedColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:1];
 	UIFont* expectedFont = [UIFont fontWithName:inputFont size:15];
@@ -310,7 +310,7 @@
 	NSString* inputFont = @"HelveticaNeue";
 	self.options.topBar.title.fontSize = [[Number alloc] initWithValue:topBarTextFontSizeInput];
 	self.options.topBar.title.fontFamily = [[Text alloc] initWithValue:inputFont];
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	UIFont* expectedFont = [UIFont fontWithName:inputFont size:15];
 	XCTAssertTrue([self.uut.navigationController.navigationBar.titleTextAttributes[@"NSFont"] isEqual:expectedFont]);
@@ -319,7 +319,7 @@
 // TODO: Currently not passing
 -(void)testTopBarTextFontFamily_invalidFont{
 	NSString* inputFont = @"HelveticaNeueeeee";
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	self.options.topBar.title.fontFamily = [[Text alloc] initWithValue:inputFont];
 	//	XCTAssertThrows([self.uut viewWillAppear:false]);
 }
@@ -327,7 +327,7 @@
 -(void)testOrientation_portrait {
 	NSArray* supportedOrientations = @[@"portrait"];
 	self.options.layout.orientation = supportedOrientations;
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	UIInterfaceOrientationMask expectedOrientation = UIInterfaceOrientationMaskPortrait;
 	XCTAssertTrue(self.uut.navigationController.supportedInterfaceOrientations == expectedOrientation);
@@ -336,7 +336,7 @@
 -(void)testOrientation_portraitString {
 	NSString* supportedOrientation = @"portrait";
 	self.options.layout.orientation = supportedOrientation;
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	UIInterfaceOrientationMask expectedOrientation = (UIInterfaceOrientationMaskPortrait);
 	XCTAssertTrue(self.uut.navigationController.supportedInterfaceOrientations == expectedOrientation);
@@ -345,7 +345,7 @@
 -(void)testOrientation_portraitAndLandscape {
 	NSArray* supportedOrientations = @[@"portrait", @"landscape"];
 	self.options.layout.orientation = supportedOrientations;
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	UIInterfaceOrientationMask expectedOrientation = (UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscape);
 	XCTAssertTrue(self.uut.navigationController.supportedInterfaceOrientations == expectedOrientation);
@@ -354,7 +354,7 @@
 -(void)testOrientation_all {
 	NSArray* supportedOrientations = @[@"all"];
 	self.options.layout.orientation = supportedOrientations;
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	UIInterfaceOrientationMask expectedOrientation = UIInterfaceOrientationMaskAll;
 	XCTAssertTrue(self.uut.navigationController.supportedInterfaceOrientations == expectedOrientation);
@@ -363,7 +363,7 @@
 -(void)testOrientation_default {
 	NSString* supportedOrientations = @"default";
 	self.options.layout.orientation = supportedOrientations;
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	UIInterfaceOrientationMask expectedOrientation = [[UIApplication sharedApplication] supportedInterfaceOrientationsForWindow:[[UIApplication sharedApplication] keyWindow]];
 	XCTAssertTrue(self.uut.navigationController.supportedInterfaceOrientations == expectedOrientation);
@@ -373,9 +373,11 @@
 -(void)testOrientationTabsController_portrait {
 	NSArray* supportedOrientations = @[@"portrait"];
 	self.options.layout.orientation = supportedOrientations;
-	NSMutableArray* controllers = [[NSMutableArray alloc] initWithArray:@[self.uut]];
-    __unused RNNBottomTabsController* vc = [[RNNBottomTabsController alloc] initWithLayoutInfo:nil creator:nil options:[[RNNNavigationOptions alloc] initEmptyOptions] defaultOptions:nil presenter:[RNNComponentPresenter new] eventEmitter:nil childViewControllers:controllers];
+	__unused RNNTabBarController* vc = [[RNNTabBarController alloc] init];
+	NSMutableArray* controllers = [NSMutableArray new];
 
+	[controllers addObject:self.uut];
+	[vc setViewControllers:controllers];
 	[self.uut viewWillAppear:false];
 
 	UIInterfaceOrientationMask expectedOrientation = UIInterfaceOrientationMaskPortrait;
@@ -385,9 +387,11 @@
 -(void)testOrientationTabsController_portraitAndLandscape {
 	NSArray* supportedOrientations = @[@"portrait", @"landscape"];
 	self.options.layout.orientation = supportedOrientations;
-    NSMutableArray* controllers = [[NSMutableArray alloc] initWithArray:@[self.uut]];
-    __unused RNNBottomTabsController* vc = [[RNNBottomTabsController alloc] initWithLayoutInfo:nil creator:nil options:[[RNNNavigationOptions alloc] initEmptyOptions] defaultOptions:nil presenter:[RNNComponentPresenter new] eventEmitter:nil childViewControllers:controllers];
+	__unused RNNTabBarController* vc = [[RNNTabBarController alloc] init];
+	NSMutableArray* controllers = [NSMutableArray new];
 
+	[controllers addObject:self.uut];
+	[vc setViewControllers:controllers];
 	[self.uut viewWillAppear:false];
 
 	UIInterfaceOrientationMask expectedOrientation = (UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscape);
@@ -397,9 +401,11 @@
 -(void)testOrientationTabsController_all {
 	NSArray* supportedOrientations = @[@"all"];
 	self.options.layout.orientation = supportedOrientations;
-	NSMutableArray* controllers = [[NSMutableArray alloc] initWithArray:@[self.uut]];
-	__unused RNNBottomTabsController* vc = [[RNNBottomTabsController alloc] initWithLayoutInfo:nil creator:nil options:[[RNNNavigationOptions alloc] initEmptyOptions] defaultOptions:nil presenter:[RNNComponentPresenter new] eventEmitter:nil childViewControllers:controllers];
+	__unused RNNTabBarController* vc = [[RNNTabBarController alloc] init];
+	NSMutableArray* controllers = [NSMutableArray new];
 
+	[controllers addObject:self.uut];
+	[vc setViewControllers:controllers];
 	[self.uut viewWillAppear:false];
 
 	UIInterfaceOrientationMask expectedOrientation = UIInterfaceOrientationMaskAll;
@@ -408,10 +414,10 @@
 
 -(void)testRightButtonsWithTitle_withoutStyle {
 	self.options.topBar.rightButtons = @[@{@"id": @"testId", @"text": @"test"}];
-	self.uut = [[RNNComponentViewController alloc] initWithLayoutInfo:nil rootViewCreator:nil eventEmitter:nil presenter:[RNNComponentPresenter new] options:self.options defaultOptions:nil];
-	RNNStackController* nav = [[RNNStackController alloc] initWithLayoutInfo:nil creator:_creator options:nil defaultOptions:nil presenter:nil eventEmitter:nil childViewControllers:@[self.uut]];
+	self.uut = [[RNNRootViewController alloc] initWithLayoutInfo:nil rootViewCreator:nil eventEmitter:nil presenter:[RNNViewControllerPresenter new] options:self.options defaultOptions:nil];
+	RNNNavigationController* nav = [[RNNNavigationController alloc] initWithLayoutInfo:nil creator:_creator options:nil defaultOptions:nil presenter:nil eventEmitter:nil childViewControllers:@[self.uut]];
 
-	RNNUIBarButtonItem* button = (RNNUIBarButtonItem*) nav.topViewController.navigationItem.rightBarButtonItems[0];
+	RNNUIBarButtonItem* button = (RNNUIBarButtonItem*)[nav.topViewController.navigationItem.rightBarButtonItems objectAtIndex:0];
 	NSString* expectedButtonId = @"testId";
 	NSString* expectedTitle = @"test";
 	XCTAssertTrue([button.buttonId isEqualToString:expectedButtonId]);
@@ -423,8 +429,8 @@
 	NSNumber* inputColor = @(0xFFFF0000);
 
 	self.options.topBar.rightButtons = @[@{@"id": @"testId", @"text": @"test", @"enabled": @false, @"buttonColor": inputColor, @"buttonFontSize": @22, @"buttonFontWeight": @"800"}];
-	self.uut = [[RNNComponentViewController alloc] initWithLayoutInfo:nil rootViewCreator:nil eventEmitter:nil presenter:[RNNComponentPresenter new] options:self.options defaultOptions:nil];
-	RNNStackController* nav = [[RNNStackController alloc] initWithLayoutInfo:nil creator:_creator options:nil defaultOptions:nil presenter:nil eventEmitter:nil childViewControllers:@[self.uut]];
+	self.uut = [[RNNRootViewController alloc] initWithLayoutInfo:nil rootViewCreator:nil eventEmitter:nil presenter:[RNNViewControllerPresenter new] options:self.options defaultOptions:nil];
+	RNNNavigationController* nav = [[RNNNavigationController alloc] initWithLayoutInfo:nil creator:_creator options:nil defaultOptions:nil presenter:nil eventEmitter:nil childViewControllers:@[self.uut]];
 
 	RNNUIBarButtonItem* button = (RNNUIBarButtonItem*)[nav.topViewController.navigationItem.rightBarButtonItems objectAtIndex:0];
 	NSString* expectedButtonId = @"testId";
@@ -436,10 +442,11 @@
 	//TODO: Determine how to tests buttonColor,buttonFontSize and buttonFontWeight?
 }
 
+
 -(void)testLeftButtonsWithTitle_withoutStyle {
 	self.options.topBar.leftButtons = @[@{@"id": @"testId", @"text": @"test"}];
-	self.uut = [[RNNComponentViewController alloc] initWithLayoutInfo:nil rootViewCreator:nil eventEmitter:nil presenter:[RNNComponentPresenter new] options:self.options defaultOptions:nil];
-	RNNStackController* nav = [[RNNStackController alloc] initWithLayoutInfo:nil creator:_creator options:nil defaultOptions:nil presenter:nil eventEmitter:nil childViewControllers:@[self.uut]];
+	self.uut = [[RNNRootViewController alloc] initWithLayoutInfo:nil rootViewCreator:nil eventEmitter:nil presenter:[RNNViewControllerPresenter new] options:self.options defaultOptions:nil];
+	RNNNavigationController* nav = [[RNNNavigationController alloc] initWithLayoutInfo:nil creator:_creator options:nil defaultOptions:nil presenter:nil eventEmitter:nil childViewControllers:@[self.uut]];
 	
 	RNNUIBarButtonItem* button = (RNNUIBarButtonItem*)[nav.topViewController.navigationItem.leftBarButtonItems objectAtIndex:0];
 	NSString* expectedButtonId = @"testId";
@@ -453,8 +460,8 @@
 	NSNumber* inputColor = @(0xFFFF0000);
 
 	self.options.topBar.leftButtons = @[@{@"id": @"testId", @"text": @"test", @"enabled": @false, @"buttonColor": inputColor, @"buttonFontSize": @22, @"buttonFontWeight": @"800"}];
-	self.uut = [[RNNComponentViewController alloc] initWithLayoutInfo:nil rootViewCreator:nil eventEmitter:nil presenter:[RNNComponentPresenter new] options:self.options defaultOptions:nil];
-	RNNStackController* nav = [[RNNStackController alloc] initWithLayoutInfo:nil creator:_creator options:nil defaultOptions:nil presenter:nil eventEmitter:nil childViewControllers:@[self.uut]];
+	self.uut = [[RNNRootViewController alloc] initWithLayoutInfo:nil rootViewCreator:nil eventEmitter:nil presenter:[RNNViewControllerPresenter new] options:self.options defaultOptions:nil];
+	RNNNavigationController* nav = [[RNNNavigationController alloc] initWithLayoutInfo:nil creator:_creator options:nil defaultOptions:nil presenter:nil eventEmitter:nil childViewControllers:@[self.uut]];
 
 	RNNUIBarButtonItem* button = (RNNUIBarButtonItem*)[nav.topViewController.navigationItem.leftBarButtonItems objectAtIndex:0];
 	NSString* expectedButtonId = @"testId";
@@ -469,7 +476,7 @@
 -(void)testTopBarNoBorderOn {
 	NSNumber* topBarNoBorderInput = @(1);
 	self.options.topBar.noBorder = [[Bool alloc] initWithValue:topBarNoBorderInput];
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	XCTAssertNotNil(self.uut.navigationController.navigationBar.shadowImage);
 }
@@ -477,7 +484,7 @@
 -(void)testTopBarNoBorderOff {
 	NSNumber* topBarNoBorderInput = @(0);
 	self.options.topBar.noBorder = [[Bool alloc] initWithValue:topBarNoBorderInput];
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	XCTAssertNil(self.uut.navigationController.navigationBar.shadowImage);
 }
@@ -510,7 +517,7 @@
 }
 
 -(void)testTopBarBlur_default {
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	XCTAssertNil([self.uut.navigationController.navigationBar viewWithTag:BLUR_TOPBAR_TAG]);
 }
@@ -518,7 +525,7 @@
 -(void)testTopBarBlur_false {
 	NSNumber* topBarBlurInput = @(0);
 	self.options.topBar.background.blur = [[Bool alloc] initWithValue:topBarBlurInput];
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	XCTAssertNil([self.uut.navigationController.navigationBar viewWithTag:BLUR_TOPBAR_TAG]);
 }
@@ -526,7 +533,7 @@
 -(void)testTopBarBlur_true {
 	NSNumber* topBarBlurInput = @(1);
 	self.options.topBar.background.blur = [[Bool alloc] initWithValue:topBarBlurInput];
-	__unused RNNStackController* nav = [self createNavigationController];
+	__unused RNNNavigationController* nav = [self createNavigationController];
 	[self.uut viewWillAppear:false];
 	XCTAssertNotNil([self.uut.navigationController.navigationBar viewWithTag:BLUR_TOPBAR_TAG]);
 }
@@ -541,7 +548,7 @@
 
 - (void)testMergeOptionsShouldCallPresenterMergeOptions {
 	RNNNavigationOptions* newOptions = [[RNNNavigationOptions alloc] initEmptyOptions];
-    [[(id) self.uut.presenter expect] mergeOptions:newOptions resolvedOptions:self.uut.options];
+	[[(id)self.uut.presenter expect] mergeOptions:newOptions currentOptions:self.uut.options];
 	[self.uut mergeOptions:newOptions];
 	[(id)self.uut.presenter verify];
 }
@@ -557,8 +564,8 @@
 #pragma mark BottomTabs
 
 
-- (RNNStackController *)createNavigationController {
-	RNNStackController* nav = [[RNNStackController alloc] initWithLayoutInfo:nil creator:nil options:[[RNNNavigationOptions alloc] initEmptyOptions] defaultOptions:nil presenter:[[RNNStackPresenter alloc] init] eventEmitter:nil childViewControllers:@[self.uut]];
+- (RNNNavigationController *)createNavigationController {
+	RNNNavigationController* nav = [[RNNNavigationController alloc] initWithLayoutInfo:nil creator:nil options:[[RNNNavigationOptions alloc] initEmptyOptions] defaultOptions:nil presenter:[[RNNNavigationControllerPresenter alloc] init] eventEmitter:nil childViewControllers:@[self.uut]];
 	
 	return nav;
 }

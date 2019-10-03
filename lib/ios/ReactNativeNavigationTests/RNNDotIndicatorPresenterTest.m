@@ -2,14 +2,14 @@
 #import <OCMock/OCMock.h>
 #import "RNNDotIndicatorPresenter.h"
 #import "DotIndicatorOptions.h"
-#import "RNNBottomTabsController.h"
-#import "RNNComponentViewController.h"
+#import "RNNTabBarController.h"
+#import "RNNRootViewController.h"
 #import "RNNTestBase.h"
 #import "UITabBarController+RNNUtils.h"
 
 @interface RNNDotIndicatorPresenterTest : RNNTestBase
 @property(nonatomic, strong) id uut;
-@property(nonatomic, strong) RNNComponentViewController *child;
+@property(nonatomic, strong) RNNRootViewController *child;
 @property(nonatomic, strong) id bottomTabs;
 @end
 
@@ -17,7 +17,7 @@
 - (void)setUp {
     [super setUp];
     self.uut = [OCMockObject partialMockForObject:[RNNDotIndicatorPresenter new]];
-    self.bottomTabs = [OCMockObject partialMockForObject:[RNNBottomTabsController new]];
+    self.bottomTabs = [OCMockObject partialMockForObject:[RNNTabBarController new]];
     self.child = [self createChild];
     [self.bottomTabs addChildViewController:self.child];
 
@@ -139,13 +139,13 @@
     [[self uut] apply:self.child :options];
 }
 
-- (RNNComponentViewController *)createChild {
+- (RNNRootViewController *)createChild {
     RNNNavigationOptions *options = [RNNNavigationOptions new];
     options.bottomTab = [RNNBottomTabOptions new];
     id img = [OCMockObject partialMockForObject:[UIImage new]];
 
     options.bottomTab.icon = [[Image alloc] initWithValue:img];
-    return [[RNNComponentViewController alloc] initWithLayoutInfo:nil rootViewCreator:nil eventEmitter:nil presenter:[RNNComponentPresenter new] options:options defaultOptions:nil];
+    return [[RNNRootViewController alloc] initWithLayoutInfo:nil rootViewCreator:nil eventEmitter:nil presenter:[RNNViewControllerPresenter new] options:options defaultOptions:nil];
 }
 
 - (BOOL)tabHasIndicator {

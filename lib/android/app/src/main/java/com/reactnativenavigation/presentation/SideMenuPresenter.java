@@ -29,11 +29,12 @@ public class SideMenuPresenter {
         return false;
     }
 
-    public void applyOptions(Options options) {
-        applyLockMode(options.sideMenuRootOptions);
+    public void mergeOptions(SideMenuRootOptions options) {
+        mergeLockMode(options);
+        mergeVisibility(options);
     }
 
-    public void mergeOptions(SideMenuRootOptions options) {
+    public void mergeChildOptions(SideMenuRootOptions options) {
         mergeLockMode(options);
         mergeVisibility(options);
     }
@@ -63,9 +64,6 @@ public class SideMenuPresenter {
         } else if (options.right.visible.isFalse()) {
             sideMenu.closeDrawer(Gravity.RIGHT, options.right.animate.get(true));
         }
-
-        options.left.visible.consume();
-        options.right.visible.consume();
     }
 
     private void mergeLockMode(SideMenuRootOptions options) {

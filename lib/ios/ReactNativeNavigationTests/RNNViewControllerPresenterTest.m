@@ -1,14 +1,14 @@
 #import <XCTest/XCTest.h>
 #import <OCMock/OCMock.h>
-#import "RNNComponentPresenter.h"
+#import "RNNViewControllerPresenter.h"
 #import "UIViewController+RNNOptions.h"
-#import "RNNComponentViewController.h"
+#import "RNNRootViewController.h"
 
 @interface RNNViewControllerPresenterTest : XCTestCase
 
-@property (nonatomic, strong) RNNComponentPresenter *uut;
+@property (nonatomic, strong) RNNViewControllerPresenter *uut;
 @property (nonatomic, strong) RNNNavigationOptions *options;
-@property (nonatomic, strong) UIViewController *boundViewController;
+@property (nonatomic, strong) UIViewController *bindedViewController;
 @property (nonatomic, strong) RNNReactComponentRegistry *componentRegistry;
 
 @end
@@ -18,123 +18,123 @@
 - (void)setUp {
     [super setUp];
 	self.componentRegistry = [OCMockObject partialMockForObject:[RNNReactComponentRegistry new]];
-	self.uut = [[RNNComponentPresenter alloc] initWithComponentRegistry:self.componentRegistry:[[RNNNavigationOptions alloc] initEmptyOptions]];
-	self.boundViewController = [OCMockObject partialMockForObject:[RNNComponentViewController new]];
-	[self.uut bindViewController:self.boundViewController];
+	self.uut = [[RNNViewControllerPresenter alloc] initWithComponentRegistry:self.componentRegistry:[[RNNNavigationOptions alloc] initEmptyOptions]];
+	self.bindedViewController = [OCMockObject partialMockForObject:[RNNRootViewController new]];
+	[self.uut bindViewController:self.bindedViewController];
 	self.options = [[RNNNavigationOptions alloc] initEmptyOptions];
 }
 
 - (void)testApplyOptions_backgroundImageDefaultNilShouldNotAddSubview {
 	[self.uut applyOptions:self.options];
-	XCTAssertTrue((self.boundViewController.view.subviews.count) == 0);
+	XCTAssertTrue((self.bindedViewController.view.subviews.count) == 0);
 }
 
 - (void)testApplyOptions_topBarPrefersLargeTitleDefaultFalse {
 	[self.uut applyOptions:self.options];
 	
-	XCTAssertTrue(self.boundViewController.navigationItem.largeTitleDisplayMode == UINavigationItemLargeTitleDisplayModeNever);
+	XCTAssertTrue(self.bindedViewController.navigationItem.largeTitleDisplayMode == UINavigationItemLargeTitleDisplayModeNever);
 }
 
 - (void)testApplyOptions_layoutBackgroundColorDefaultWhiteColor {
 	[self.uut applyOptions:self.options];
-	XCTAssertNil(self.boundViewController.view.backgroundColor);
+	XCTAssertNil(self.bindedViewController.view.backgroundColor);
 }
 
 - (void)testApplyOptions_statusBarBlurDefaultFalse {
 	[self.uut applyOptions:self.options];
-	XCTAssertNil([self.boundViewController.view viewWithTag:BLUR_STATUS_TAG]);
+	XCTAssertNil([self.bindedViewController.view viewWithTag:BLUR_STATUS_TAG]);
 }
 
 - (void)testApplyOptions_statusBarStyleDefaultStyle {
 	[self.uut applyOptions:self.options];
-	XCTAssertTrue([self.boundViewController preferredStatusBarStyle] == UIStatusBarStyleDefault);
+	XCTAssertTrue([self.bindedViewController preferredStatusBarStyle] == UIStatusBarStyleDefault);
 }
 
 - (void)testApplyOptions_backButtonVisibleDefaultTrue {
 	[self.uut applyOptions:self.options];
-	XCTAssertFalse(self.boundViewController.navigationItem.hidesBackButton);
+	XCTAssertFalse(self.bindedViewController.navigationItem.hidesBackButton);
 }
 
 - (void)testApplyOptions_drawBehindTabBarTrueWhenVisibleFalse {
 	self.options.bottomTabs.visible = [[Bool alloc] initWithValue:@(0)];
-	[[(id) self.boundViewController expect] setDrawBehindTabBar:YES];
+	[[(id)self.bindedViewController expect] rnn_setDrawBehindTabBar:YES];
 	[self.uut applyOptionsOnInit:self.options];
-	[(id)self.boundViewController verify];
+	[(id)self.bindedViewController verify];
 }
 
 - (void)testApplyOptions_setOverlayTouchOutsideIfHasValue {
     self.options.overlay.interceptTouchOutside = [[Bool alloc] initWithBOOL:YES];
-    [(UIViewController *) [(id) self.boundViewController expect] setInterceptTouchOutside:YES];
+    [[(id)self.bindedViewController expect] rnn_setInterceptTouchOutside:YES];
     [self.uut applyOptions:self.options];
-    [(id)self.boundViewController verify];
+    [(id)self.bindedViewController verify];
 }
 
 - (void)testBindViewControllerShouldCreateNavigationButtonsCreator {
-	RNNComponentPresenter* presenter = [[RNNComponentPresenter alloc] init];
-	[presenter bindViewController:self.boundViewController];
+	RNNViewControllerPresenter* presenter = [[RNNViewControllerPresenter alloc] init];
+	[presenter bindViewController:self.bindedViewController];
 	XCTAssertNotNil(presenter.navigationButtons);
 }
 
-- (void)testApplyOptionsOnInit_shouldSetModalPresentationStyleWithDefault {
-    [(UIViewController *) [(id) self.boundViewController expect] setModalPresentationStyle:UIModalPresentationFullScreen];
+- (void)testApplyOptionsOnInit_shouldSetModalPresentetionStyleWithDefault {
+	[[(id)self.bindedViewController expect] rnn_setModalPresentationStyle:UIModalPresentationFullScreen];
 	[self.uut applyOptionsOnInit:self.options];
-	[(id)self.boundViewController verify];
+	[(id)self.bindedViewController verify];
 }
 
 - (void)testApplyOptionsOnInit_shouldSetModalTransitionStyleWithDefault {
-	[(UIViewController *) [(id) self.boundViewController expect] setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+	[[(id)self.bindedViewController expect] rnn_setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
 	[self.uut applyOptionsOnInit:self.options];
-	[(id)self.boundViewController verify];
+	[(id)self.bindedViewController verify];
 }
 
-- (void)testApplyOptionsOnInit_shouldSetModalPresentationStyleWithValue {
+- (void)testApplyOptionsOnInit_shouldSetModalPresentetionStyleWithValue {
 	self.options.modalPresentationStyle = [[Text alloc] initWithValue:@"overCurrentContext"];
-    [(UIViewController *) [(id) self.boundViewController expect] setModalPresentationStyle:UIModalPresentationOverCurrentContext];
+	[[(id)self.bindedViewController expect] rnn_setModalPresentationStyle:UIModalPresentationOverCurrentContext];
 	[self.uut applyOptionsOnInit:self.options];
-	[(id)self.boundViewController verify];
+	[(id)self.bindedViewController verify];
 }
 
 - (void)testApplyOptionsOnInit_shouldSetModalTransitionStyleWithValue {
 	self.options.modalTransitionStyle = [[Text alloc] initWithValue:@"crossDissolve"];
-	[(UIViewController *) [(id) self.boundViewController expect] setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+	[[(id)self.bindedViewController expect] rnn_setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
 	[self.uut applyOptionsOnInit:self.options];
-	[(id)self.boundViewController verify];
+	[(id)self.bindedViewController verify];
 }
 
 -(void)testApplyOptionsOnInit_TopBarDrawUnder_true {
     self.options.topBar.drawBehind = [[Bool alloc] initWithValue:@(1)];
-
-	[[(id) self.boundViewController expect] setDrawBehindTopBar:YES];
+    
+    [[(id)self.bindedViewController expect] rnn_setDrawBehindTopBar:YES];
     [self.uut applyOptionsOnInit:self.options];
-    [(id)self.boundViewController verify];
+    [(id)self.bindedViewController verify];
 }
 
 -(void)testApplyOptionsOnInit_TopBarDrawUnder_false {
     self.options.topBar.drawBehind = [[Bool alloc] initWithValue:@(0)];
-
-	[[(id) self.boundViewController expect] setDrawBehindTopBar:NO];
+    
+    [[(id)self.bindedViewController expect] rnn_setDrawBehindTopBar:NO];
     [self.uut applyOptionsOnInit:self.options];
-    [(id)self.boundViewController verify];
+    [(id)self.bindedViewController verify];
 }
 
 -(void)testApplyOptionsOnInit_BottomTabsDrawUnder_true {
     self.options.bottomTabs.drawBehind = [[Bool alloc] initWithValue:@(1)];
-
-	[[(id) self.boundViewController expect] setDrawBehindTabBar:YES];
+    
+    [[(id)self.bindedViewController expect] rnn_setDrawBehindTabBar:YES];
     [self.uut applyOptionsOnInit:self.options];
-    [(id)self.boundViewController verify];
+    [(id)self.bindedViewController verify];
 }
 
 -(void)testApplyOptionsOnInit_BottomTabsDrawUnder_false {
     self.options.bottomTabs.drawBehind = [[Bool alloc] initWithValue:@(0)];
-
-	[[(id) self.boundViewController expect] setDrawBehindTabBar:NO];
+    
+    [[(id)self.bindedViewController expect] rnn_setDrawBehindTabBar:NO];
     [self.uut applyOptionsOnInit:self.options];
-    [(id)self.boundViewController verify];
+    [(id)self.bindedViewController verify];
 }
 
 - (void)testReactViewShouldBeReleasedOnDealloc {
-	RNNComponentViewController* bindViewController = [RNNComponentViewController new];
+	RNNRootViewController* bindViewController = [RNNRootViewController new];
 	bindViewController.layoutInfo = [self createLayoutInfoWithComponentId:@"componentId"];
 	[self.uut bindViewController:bindViewController];
 	
@@ -146,7 +146,7 @@
 }
 
 - (void)testBindViewControllerShouldSetBindedComponentId {
-	RNNComponentViewController* bindViewController = [RNNComponentViewController new];
+	RNNRootViewController* bindViewController = [RNNRootViewController new];
 	RNNLayoutInfo* layoutInfo = [[RNNLayoutInfo alloc] init];
 	layoutInfo.componentId = @"componentId";
 	bindViewController.layoutInfo = layoutInfo;
@@ -156,7 +156,7 @@
 }
 
 - (void)testRenderComponentsCreateReactViewWithBindedComponentId {
-	RNNComponentViewController* bindedViewController = [RNNComponentViewController new];
+	RNNRootViewController* bindedViewController = [RNNRootViewController new];
 	RNNLayoutInfo* layoutInfo = [self createLayoutInfoWithComponentId:@"componentId"];
 	bindedViewController.layoutInfo = layoutInfo;
 	
@@ -175,32 +175,32 @@
 - (void)testApplyOptionsOnWillMoveToParent_shouldSetBackButtonOnBindedViewController_withTitle {
 	Text* title = [[Text alloc] initWithValue:@"Title"];
 	self.options.topBar.backButton.title = title;
-	[[(id) self.boundViewController expect] setBackButtonIcon:nil withColor:nil title:title.get];
+	[[(id)self.bindedViewController expect] rnn_setBackButtonIcon:nil withColor:nil title:title.get];
 	[self.uut applyOptionsOnWillMoveToParentViewController:self.options];
-	[(id)self.boundViewController verify];
+	[(id)self.bindedViewController verify];
 }
 
 - (void)testApplyOptionsOnWillMoveToParent_shouldSetBackButtonOnBindedViewController_withHideTitle {
 	Text* title = [[Text alloc] initWithValue:@"Title"];
 	self.options.topBar.backButton.title = title;
 	self.options.topBar.backButton.showTitle = [[Bool alloc] initWithValue:@(0)];
-	[[(id) self.boundViewController expect] setBackButtonIcon:nil withColor:nil title:@""];
+	[[(id)self.bindedViewController expect] rnn_setBackButtonIcon:nil withColor:nil title:@""];
 	[self.uut applyOptionsOnWillMoveToParentViewController:self.options];
-	[(id)self.boundViewController verify];
+	[(id)self.bindedViewController verify];
 }
 
 - (void)testApplyOptionsOnWillMoveToParent_shouldSetBackButtonOnBindedViewController_withIcon {
 	Image* image = [[Image alloc] initWithValue:[UIImage new]];
 	self.options.topBar.backButton.icon = image;
-	[[(id) self.boundViewController expect] setBackButtonIcon:image.get withColor:nil title:nil];
+	[[(id)self.bindedViewController expect] rnn_setBackButtonIcon:image.get withColor:nil title:nil];
 	[self.uut applyOptionsOnWillMoveToParentViewController:self.options];
-	[(id)self.boundViewController verify];
+	[(id)self.bindedViewController verify];
 }
 
 - (void)testApplyOptionsOnWillMoveToParent_shouldSetBackButtonOnBindedViewController_withDefaultValues {
-	[[(id) self.boundViewController expect] setBackButtonIcon:nil withColor:nil title:nil];
+	[[(id)self.bindedViewController expect] rnn_setBackButtonIcon:nil withColor:nil title:nil];
 	[self.uut applyOptionsOnWillMoveToParentViewController:self.options];
-	[(id)self.boundViewController verify];
+	[(id)self.bindedViewController verify];
 }
 
 

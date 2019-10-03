@@ -1,6 +1,6 @@
 #import <XCTest/XCTest.h>
 #import "RNNModalManager.h"
-#import "RNNComponentViewController.h"
+#import "RNNRootViewController.h"
 
 @interface MockViewController : UIViewController
 
@@ -30,17 +30,17 @@
 @end
 
 @implementation RNNModalManagerTest {
-	RNNComponentViewController* _vc1;
-	RNNComponentViewController* _vc2;
-	RNNComponentViewController* _vc3;
+	RNNRootViewController* _vc1;
+	RNNRootViewController* _vc2;
+	RNNRootViewController* _vc3;
 	MockModalManager* _modalManager;
 }
 
 - (void)setUp {
 	[super setUp];
-	_vc1 = [RNNComponentViewController new];
-	_vc2 = [RNNComponentViewController new];
-	_vc3 = [RNNComponentViewController new];
+	_vc1 = [RNNRootViewController new];
+	_vc2 = [RNNRootViewController new];
+	_vc3 = [RNNRootViewController new];
 	_modalManager = [[MockModalManager alloc] init];
 	_modalManager.topPresentedVC = [MockViewController new];
 }

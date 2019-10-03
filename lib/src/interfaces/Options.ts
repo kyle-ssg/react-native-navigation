@@ -3,7 +3,6 @@ import { ImageRequireSource, Insets } from 'react-native';
 
 type Color = string;
 type FontFamily = string;
-type FontWeight = 'regular' | 'bold' | 'thin' | 'ultraLight' | 'light' | 'medium' | 'semibold' | 'heavy' | 'black';
 type LayoutOrientation = 'portrait' | 'landscape';
 type AndroidDensityNumber = number;
 type SystemItemIcon = 'done' | 'cancel' | 'edit'
@@ -120,11 +119,6 @@ export interface OptionsTopBarLargeTitle {
    * Set the font family of large title's text
    */
   fontFamily?: FontFamily;
-  /**
-   * Set the font weight, ignore fontFamily and use the iOS system fonts instead
-   * #### (iOS specific)
-   */
-  fontWeight?: FontWeight;
 }
 
 export interface OptionsTopBarTitle {
@@ -146,11 +140,6 @@ export interface OptionsTopBarTitle {
    * Make sure that the font is available
    */
   fontFamily?: FontFamily;
-  /**
-   * Set the font weight, ignore fontFamily and use the iOS system fonts instead
-   * #### (iOS specific)
-   */
-  fontWeight?: FontWeight;
   /**
    * Custom component as the title view
    */
@@ -201,11 +190,6 @@ export interface OptionsTopBarSubtitle {
    * Set subtitle font family
    */
   fontFamily?: FontFamily;
-  /**
-   * Set the font weight, ignore fontFamily and use the iOS system fonts instead
-   * #### (iOS specific)
-   */
-  fontWeight?: FontWeight;
   /**
    * Set subtitle alignment
    */
@@ -306,11 +290,6 @@ export interface OptionsTopBarButton {
    */
   fontFamily?: string;
   /**
-   * Set the font weight, ignore fontFamily and use the iOS system fonts instead
-   * #### (iOS specific)
-   */
-  fontWeight?: FontWeight;
-  /**
    * Set the button enabled or disabled
    * @default true
    */
@@ -333,7 +312,7 @@ export interface OptionsTopBarButton {
   testID?: string;
   /**
    * (Android only) Set showAsAction value
-   * @see {@link https://developer.android.com/guide/topics/resources/menu-resource|Android developer guide: Menu resource}
+   * @see {@link https://developer.android.com/guide/topics/resources/menu-resource|Android developer guide: Menu resource} 
    */
   showAsAction?: 'ifRoom' | 'withText' | 'always' | 'never';
 }
@@ -534,18 +513,7 @@ export interface OptionsBottomTabs {
   elevation?: AndroidDensityNumber;
 }
 
-export interface DotIndicatorOptions {
-    // default red
-    color?: Color,
-    // default 6
-    size?: number,
-    // default false
-    visible?: boolean,
-}
-
 export interface OptionsBottomTab {
-    dotIndicator?: DotIndicatorOptions,
-
   /**
    * Set the text to display below the icon
    */
@@ -586,11 +554,6 @@ export interface OptionsBottomTab {
    * Set the text font family
    */
   fontFamily?: FontFamily;
-    /**
-   * Set the font weight, ignore fontFamily and use the iOS system fonts instead
-   * #### (iOS specific)
-   */
-  fontWeight?: FontWeight;
   /**
    * Set the text font size
    */

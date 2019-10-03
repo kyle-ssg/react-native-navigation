@@ -1,7 +1,6 @@
 import { ImageRequireSource, Insets } from 'react-native';
 declare type Color = string;
 declare type FontFamily = string;
-declare type FontWeight = 'regular' | 'bold' | 'thin' | 'ultraLight' | 'light' | 'medium' | 'semibold' | 'heavy' | 'black';
 declare type LayoutOrientation = 'portrait' | 'landscape';
 declare type AndroidDensityNumber = number;
 declare type SystemItemIcon = 'done' | 'cancel' | 'edit' | 'save' | 'add' | 'flexibleSpace' | 'fixedSpace' | 'compose' | 'reply' | 'action' | 'organize' | 'bookmarks' | 'search' | 'refresh' | 'stop' | 'camera' | 'trash' | 'play' | 'pause' | 'rewind' | 'fastForward' | 'undo' | 'redo';
@@ -106,11 +105,6 @@ export interface OptionsTopBarLargeTitle {
      * Set the font family of large title's text
      */
     fontFamily?: FontFamily;
-    /**
-     * Set the font weight, ignore fontFamily and use the iOS system fonts instead
-     * #### (iOS specific)
-     */
-    fontWeight?: FontWeight;
 }
 export interface OptionsTopBarTitle {
     /**
@@ -131,11 +125,6 @@ export interface OptionsTopBarTitle {
      * Make sure that the font is available
      */
     fontFamily?: FontFamily;
-    /**
-     * Set the font weight, ignore fontFamily and use the iOS system fonts instead
-     * #### (iOS specific)
-     */
-    fontWeight?: FontWeight;
     /**
      * Custom component as the title view
      */
@@ -185,11 +174,6 @@ export interface OptionsTopBarSubtitle {
      * Set subtitle font family
      */
     fontFamily?: FontFamily;
-    /**
-     * Set the font weight, ignore fontFamily and use the iOS system fonts instead
-     * #### (iOS specific)
-     */
-    fontWeight?: FontWeight;
     /**
      * Set subtitle alignment
      */
@@ -286,11 +270,6 @@ export interface OptionsTopBarButton {
      * Set the button font family
      */
     fontFamily?: string;
-    /**
-     * Set the font weight, ignore fontFamily and use the iOS system fonts instead
-     * #### (iOS specific)
-     */
-    fontWeight?: FontWeight;
     /**
      * Set the button enabled or disabled
      * @default true
@@ -510,13 +489,7 @@ export interface OptionsBottomTabs {
      */
     elevation?: AndroidDensityNumber;
 }
-export interface DotIndicatorOptions {
-    color?: Color;
-    size?: number;
-    visible?: boolean;
-}
 export interface OptionsBottomTab {
-    dotIndicator?: DotIndicatorOptions;
     /**
      * Set the text to display below the icon
      */
@@ -557,11 +530,6 @@ export interface OptionsBottomTab {
      * Set the text font family
      */
     fontFamily?: FontFamily;
-    /**
-   * Set the font weight, ignore fontFamily and use the iOS system fonts instead
-   * #### (iOS specific)
-   */
-    fontWeight?: FontWeight;
     /**
      * Set the text font size
      */

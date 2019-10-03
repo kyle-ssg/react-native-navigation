@@ -42,12 +42,8 @@ public class RootPresenter {
         if (options.animations.setRoot.waitForRender.isTrue()) {
             root.getView().setAlpha(0);
             root.addOnAppearedListener(() -> {
-                if (root.isDestroyed()) {
-                    listener.onError("Could not set root - Waited for the view to become visible but it was destroyed");
-                } else {
-                    root.getView().setAlpha(1);
-                    animateSetRootAndReportSuccess(root, listener, options);
-                }
+                root.getView().setAlpha(1);
+                animateSetRootAndReportSuccess(root, listener, options);
             });
         } else {
             animateSetRootAndReportSuccess(root, listener, options);

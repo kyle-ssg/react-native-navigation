@@ -1,37 +1,37 @@
 #import "UITabBarController+RNNOptions.h"
-#import "RNNBottomTabsController.h"
+#import "RNNTabBarController.h"
 
 @implementation UITabBarController (RNNOptions)
 
-- (void)setCurrentTabIndex:(NSUInteger)currentTabIndex {
+- (void)rnn_setCurrentTabIndex:(NSUInteger)currentTabIndex {
 	[self setSelectedIndex:currentTabIndex];
 }
 
-- (void)setCurrentTabID:(NSString *)currentTabId {
-	[(RNNBottomTabsController*)self setSelectedIndexByComponentID:currentTabId];
+- (void)rnn_setCurrentTabID:(NSString *)currentTabId {
+	[(RNNTabBarController*)self setSelectedIndexByComponentID:currentTabId];
 }
 
-- (void)setTabBarTestID:(NSString *)testID {
+- (void)rnn_setTabBarTestID:(NSString *)testID {
 	self.tabBar.accessibilityIdentifier = testID;
 }
 
-- (void)setTabBarBackgroundColor:(UIColor *)backgroundColor {
+- (void)rnn_setTabBarBackgroundColor:(UIColor *)backgroundColor {
 	self.tabBar.barTintColor = backgroundColor;
 }
 
-- (void)setTabBarStyle:(UIBarStyle)barStyle {
+- (void)rnn_setTabBarStyle:(UIBarStyle)barStyle {
 	self.tabBar.barStyle = barStyle;
 }
 
-- (void)setTabBarTranslucent:(BOOL)translucent {
+- (void)rnn_setTabBarTranslucent:(BOOL)translucent {
 	self.tabBar.translucent = translucent;
 }
 
-- (void)setTabBarHideShadow:(BOOL)hideShadow {
+- (void)rnn_setTabBarHideShadow:(BOOL)hideShadow {
 	self.tabBar.clipsToBounds = hideShadow;
 }
 
-- (void)setTabBarVisible:(BOOL)visible animated:(BOOL)animated {
+- (void)rnn_setTabBarVisible:(BOOL)visible animated:(BOOL)animated {
     const CGRect tabBarFrame = self.tabBar.frame;
 	const CGRect tabBarVisibleFrame = CGRectMake(tabBarFrame.origin.x,
 												 self.view.frame.size.height - tabBarFrame.size.height,
@@ -74,7 +74,7 @@
 	}
 }
 
-- (void)forEachTab:(void (^)(UIView *, UIViewController * tabViewController, int tabIndex))performOnTab {
+- (void)rnn_forEachTab:(void (^)(UIView *, UIViewController * tabViewController, int tabIndex))performOnTab {
     int tabIndex = 0;
     for (UIView * tab in self.tabBar.subviews) {
         if ([NSStringFromClass([tab class]) isEqualToString:@"UITabBarButton"]) {

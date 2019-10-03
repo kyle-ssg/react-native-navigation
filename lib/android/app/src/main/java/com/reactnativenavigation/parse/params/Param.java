@@ -4,20 +4,9 @@ import static com.reactnativenavigation.utils.ObjectUtils.equalsNotNull;
 
 public abstract class Param<T> {
     protected T value;
-    private boolean consumed;
 
     Param(T value) {
         this.value = value;
-    }
-
-    public T getAndConsume() {
-        T value = get();
-        consumed = true;
-        return value;
-    }
-
-    public void consume() {
-        consumed = true;
     }
 
     public T get() {
@@ -32,7 +21,7 @@ public abstract class Param<T> {
     }
 
     public boolean hasValue() {
-        return value != null && !consumed;
+        return value != null;
     }
 
     public boolean canApplyValue() {

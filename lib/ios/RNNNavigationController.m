@@ -1,14 +1,10 @@
-#import "RNNStackController.h"
-#import "RNNComponentViewController.h"
+#import "RNNNavigationController.h"
+#import "RNNRootViewController.h"
+#import "InteractivePopGestureDelegate.h"
 
 const NSInteger TOP_BAR_TRANSPARENT_TAG = 78264803;
 
-@implementation RNNStackController
-
--(void)setDefaultOptions:(RNNNavigationOptions *)defaultOptions {
-	[super setDefaultOptions:defaultOptions];
-	[self.presenter setDefaultOptions:defaultOptions];
-}
+@implementation RNNNavigationController
 
 - (void)viewDidLayoutSubviews {
 	[super viewDidLayoutSubviews];
@@ -23,12 +19,16 @@ const NSInteger TOP_BAR_TRANSPARENT_TAG = 78264803;
 	return self.navigationBar.frame.size.height;
 }
 
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+	return self.getCurrentChild.supportedInterfaceOrientations;
+}
+
 - (UINavigationController *)navigationController {
 	return self;
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-	return [_presenter getStatusBarStyle:self.resolveOptions];
+	return self.getCurrentChild.preferredStatusBarStyle;
 }
 
 - (UIModalPresentationStyle)modalPresentationStyle {
@@ -38,8 +38,8 @@ const NSInteger TOP_BAR_TRANSPARENT_TAG = 78264803;
 - (UIViewController *)popViewControllerAnimated:(BOOL)animated {
 	if (self.viewControllers.count > 1) {
 		UIViewController *controller = self.viewControllers[self.viewControllers.count - 2];
-		if ([controller isKindOfClass:[RNNComponentViewController class]]) {
-			RNNComponentViewController *rnnController = (RNNComponentViewController *)controller;
+		if ([controller isKindOfClass:[RNNRootViewController class]]) {
+			RNNRootViewController *rnnController = (RNNRootViewController *)controller;
 			[self.presenter applyOptionsBeforePopping:rnnController.resolveOptions];
 		}
 	}

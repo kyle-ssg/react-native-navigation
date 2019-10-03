@@ -3,7 +3,7 @@
 #import "RNNComponentOptions.h"
 #import "RNNReactView.h"
 
-@protocol RNNComponentViewCreator
+@protocol RNNRootViewCreator
 
 - (RNNReactView*)createRootView:(NSString*)name rootViewId:(NSString*)rootViewId availableSize:(CGSize)availableSize reactViewReadyBlock:(RNNReactViewReadyCompletionBlock)reactViewReadyBlock;
 
