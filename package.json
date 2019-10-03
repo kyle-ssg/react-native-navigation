@@ -1,51 +1,31 @@
 {
-  "name": "react-native-navigation",
-  "version": "3.2.0",
-  "description": "React Native Navigation - truly native navigation for iOS and Android",
-  "license": "MIT",
-  "nativePackage": true,
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+  "_from": "react-native-navigation@3.2.0-snapshot.524",
+  "_id": "react-native-navigation@3.2.0-snapshot.524",
+  "_inBundle": false,
+  "_integrity": "sha512-1fXf8wgwyrx3MGS3oeKHNU4Fq547mM9kohRTD58MednGAQLxhgglR0tBvKYkrYc/+PrbV3K1tV8UQHir0isDjw==",
+  "_location": "/react-native-navigation",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "react-native-navigation@3.2.0-snapshot.524",
+    "name": "react-native-navigation",
+    "escapedName": "react-native-navigation",
+    "rawSpec": "3.2.0-snapshot.524",
+    "saveSpec": null,
+    "fetchSpec": "3.2.0-snapshot.524"
   },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-native-navigation/-/react-native-navigation-3.2.0-snapshot.524.tgz",
+  "_shasum": "60c09df9d06388dd4b11ac168219d507d2f352ba",
+  "_spec": "react-native-navigation@3.2.0-snapshot.524",
+  "_where": "/Users/kyle/dp-janus-b2c-frontend/mobile",
   "bugs": {
     "url": "https://github.com/wix/react-native-navigation/issues"
   },
-  "homepage": "https://github.com/wix/react-native-navigation",
-  "readme": "https://github.com/wix/react-native-navigation#readme",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/wix/react-native-navigation.git"
-  },
-  "main": "lib/dist/index.js",
-  "typings": "lib/dist/index.d.ts",
-  "scripts": {
-    "build": "rm -rf ./lib/dist && tsc",
-    "xcode": "open playground/ios/playground.xcodeproj",
-    "install-android": "node ./scripts/install-android",
-    "uninstall-android": "cd playground/android && ./gradlew uninstallAll",
-    "clean": "node ./scripts/clean",
-    "prestart": "npm run build",
-    "start": "node ./scripts/start",
-    "pretest-js": "npm run build",
-    "test-js": "node ./scripts/test-js",
-    "test-unit-ios": "node ./scripts/test-unit --ios",
-    "test-unit-android": "node ./scripts/test-unit --android",
-    "pretest-e2e-android": "npm run build",
-    "test-e2e-android": "node ./scripts/test-e2e --android",
-    "test-e2e-android-locked": "node ./scripts/test-e2e-android-locked",
-    "pretest-e2e-ios": "npm run build",
-    "test-e2e-ios": "node ./scripts/test-e2e --ios",
-    "test-e2e-ios-multi": "npm run test-e2e-ios -- --multi",
-    "test-all": "node ./scripts/test-all",
-    "prerelease": "npm run build",
-    "release": "node ./scripts/release",
-    "local-docs": "node ./scripts/local-docs",
-    "gen-docs": "ts-node ./scripts/gen-docs/Main"
-  },
-  "peerDependencies": {
-    "react": "*",
-    "react-native": "*"
-  },
+  "bundleDependencies": false,
   "dependencies": {
     "hoist-non-react-statics": "3.x.x",
     "lodash": "4.17.x",
@@ -53,68 +33,8 @@
     "react-lifecycles-compat": "2.0.0",
     "tslib": "1.9.3"
   },
-  "devDependencies": {
-    "@babel/core": "^7.5.5",
-    "@babel/plugin-proposal-export-default-from": "7.2.0",
-    "@babel/plugin-proposal-export-namespace-from": "7.2.0",
-    "@types/hoist-non-react-statics": "^3.0.1",
-    "@types/jest": "23.x.x",
-    "@types/lodash": "4.x.x",
-    "@types/react": "16.x.x",
-    "@types/react-native": "0.57.7",
-    "@types/react-test-renderer": "16.x.x",
-    "detox": "14.x.x",
-    "react-native-ui-lib": "3.24.2",
-    "handlebars": "4.x.x",
-    "jest": "24.0.0-alpha.6",
-    "metro-react-native-babel-preset": "0.52.x",
-    "react": "16.8.6",
-    "react-native": "0.60.0",
-    "react-native-typescript-transformer": "1.2.12",
-    "react-native-view-overflow": "0.0.4",
-    "react-native-keyboard-tracking-view": "5.x.x",
-    "react-redux": "5.x.x",
-    "react-test-renderer": "16.6.1",
-    "redux": "3.x.x",
-    "remx": "2.x.x",
-    "semver": "5.x.x",
-    "shell-utils": "1.x.x",
-    "ts-mockito": "^2.3.1",
-    "ts-node": "5.x.x",
-    "tslint": "5.x.x",
-    "typedoc": "0.x.x",
-    "typescript": "3.2.2"
-  },
-  "jest": {
-    "preset": "react-native",
-    "transform": {
-      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
-    },
-    "roots": [
-      "<rootDir>/node_modules/",
-      "<rootDir>/lib/dist/",
-      "<rootDir>/integration/"
-    ],
-    "collectCoverageFrom": [
-      "lib/dist/**/*.js",
-      "integration/**/*.js",
-      "!lib/dist/index.js",
-      "!lib/dist/Navigation.js",
-      "!lib/dist/adapters/**/*",
-      "!lib/dist/interfaces/**/*",
-      "!lib/dist/**/*.test.*",
-      "!integration/**/*.test.*",
-      "!integration/*.test.*"
-    ],
-    "resetMocks": true,
-    "resetModules": true,
-    "coverageReporters": [
-      "json",
-      "lcov",
-      "text",
-      "html"
-    ]
-  },
+  "deprecated": false,
+  "description": "React Native Navigation - truly native navigation for iOS and Android",
   "detox": {
     "test-runner": "jest",
     "specs": "",
@@ -165,5 +85,109 @@
         "name": "Nexus_5X_API_23"
       }
     }
-  }
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-export-default-from": "7.2.0",
+    "@babel/plugin-proposal-export-namespace-from": "7.2.0",
+    "@types/hoist-non-react-statics": "^3.0.1",
+    "@types/jest": "23.x.x",
+    "@types/lodash": "4.x.x",
+    "@types/react": "16.x.x",
+    "@types/react-native": "0.57.7",
+    "@types/react-test-renderer": "16.x.x",
+    "detox": "14.x.x",
+    "handlebars": "4.x.x",
+    "jest": "24.0.0-alpha.6",
+    "metro-react-native-babel-preset": "0.52.x",
+    "react": "16.8.6",
+    "react-native": "0.60.0",
+    "react-native-keyboard-tracking-view": "5.x.x",
+    "react-native-typescript-transformer": "1.2.12",
+    "react-native-ui-lib": "3.24.2",
+    "react-native-view-overflow": "0.0.4",
+    "react-redux": "5.x.x",
+    "react-test-renderer": "16.6.1",
+    "redux": "3.x.x",
+    "remx": "2.x.x",
+    "semver": "5.x.x",
+    "shell-utils": "1.x.x",
+    "ts-mockito": "^2.3.1",
+    "ts-node": "5.x.x",
+    "tslint": "5.x.x",
+    "typedoc": "0.x.x",
+    "typescript": "3.2.2"
+  },
+  "homepage": "https://github.com/wix/react-native-navigation",
+  "jest": {
+    "preset": "react-native",
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
+    },
+    "roots": [
+      "<rootDir>/node_modules/",
+      "<rootDir>/lib/dist/",
+      "<rootDir>/integration/"
+    ],
+    "collectCoverageFrom": [
+      "lib/dist/**/*.js",
+      "integration/**/*.js",
+      "!lib/dist/index.js",
+      "!lib/dist/Navigation.js",
+      "!lib/dist/adapters/**/*",
+      "!lib/dist/interfaces/**/*",
+      "!lib/dist/**/*.test.*",
+      "!integration/**/*.test.*",
+      "!integration/*.test.*"
+    ],
+    "resetMocks": true,
+    "resetModules": true,
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text",
+      "html"
+    ]
+  },
+  "license": "MIT",
+  "main": "lib/dist/index.js",
+  "name": "react-native-navigation",
+  "nativePackage": true,
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wix/react-native-navigation.git"
+  },
+  "scripts": {
+    "build": "rm -rf ./lib/dist && tsc",
+    "clean": "node ./scripts/clean",
+    "gen-docs": "ts-node ./scripts/gen-docs/Main",
+    "install-android": "node ./scripts/install-android",
+    "local-docs": "node ./scripts/local-docs",
+    "prerelease": "npm run build",
+    "prestart": "npm run build",
+    "pretest-e2e-android": "npm run build",
+    "pretest-e2e-ios": "npm run build",
+    "pretest-js": "npm run build",
+    "release": "node ./scripts/release",
+    "start": "node ./scripts/start",
+    "test-all": "node ./scripts/test-all",
+    "test-e2e-android": "node ./scripts/test-e2e --android",
+    "test-e2e-android-locked": "node ./scripts/test-e2e-android-locked",
+    "test-e2e-ios": "node ./scripts/test-e2e --ios",
+    "test-e2e-ios-multi": "npm run test-e2e-ios -- --multi",
+    "test-js": "node ./scripts/test-js",
+    "test-unit-android": "node ./scripts/test-unit --android",
+    "test-unit-ios": "node ./scripts/test-unit --ios",
+    "uninstall-android": "cd playground/android && ./gradlew uninstallAll",
+    "xcode": "open playground/ios/playground.xcodeproj"
+  },
+  "typings": "lib/dist/index.d.ts",
+  "version": "3.2.0-snapshot.524"
 }
