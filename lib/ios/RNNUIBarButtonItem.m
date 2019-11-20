@@ -35,7 +35,7 @@
 	reactView.delegate = self;
 	reactView.backgroundColor = [UIColor clearColor];
 	reactView.hidden = YES;
-	
+        reactView.translatesAutoresizingMaskIntoConstraints = NO;
 	self.widthConstraint = [NSLayoutConstraint constraintWithItem:reactView
 														attribute:NSLayoutAttributeWidth
 														relatedBy:NSLayoutRelationEqual
